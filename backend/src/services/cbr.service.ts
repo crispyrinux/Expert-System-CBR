@@ -103,7 +103,8 @@ export const cbrService = {
   /**
    * Mendeteksi ambiguitas apabila selisih ranking 1 dan 2 < 10%
    */
-  detectAmbiguity(top1Sim: number, top2Sim: number): boolean {
+  detectAmbiguity(top1Sim: number, top2Sim: number, status: DiagnosisStatus): boolean {
+    if (status === "NO_DIAGNOSIS") return false;
     return top1Sim - top2Sim < 10;
   },
 
@@ -133,7 +134,8 @@ export const cbrService = {
     if (sortedCases.length > 1) {
       ambiguous = this.detectAmbiguity(
         bestMatch.similarity,
-        sortedCases[1].similarity
+        sortedCases[1].similarity,
+        status
       );
     }
 
