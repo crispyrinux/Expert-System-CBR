@@ -52,62 +52,116 @@ npx prisma migrate dev --name init
 
 
 ## How to run
- 1. Persiapan Awal (Prasyarat)
-  Pastikan hal-hal berikut sudah berjalan di komputer Anda:
-   * Node.js (versi 18 atau ke atas).
-   * PostgreSQL (pastikan service database sedang berjalan).
-   * File .env di dalam folder backend sudah berisi konfigurasi DATABASE_URL yang benar (berdasarkan informasi sebelumnya, database Anda sudah terkoneksi).
+# Sistem Pakar Diagnosis Hama dan Penyakit Tanaman Padi (Metode CBR)
 
-  2. Langkah-langkah Menjalankan Server
+Sistem pakar ini dirancang untuk mendiagnosa hama dan penyakit pada tanaman padi menggunakan metode **Case-Based Reasoning (CBR)**. Sistem ini tidak hanya memberikan diagnosa berdasarkan kemiripan gejala, tetapi juga memiliki kemampuan untuk "belajar" dengan menyimpan kasus baru melalui validasi pakar.
 
-  Silakan buka Terminal atau Command Prompt, lalu ikuti perintah ini:
+## 🚀 Alur Kerja Sistem (Metodologi CBR)
 
-  Langkah 1: Masuk ke direktori backend
+Sistem mengimplementasikan siklus lengkap CBR:
+1.  **Retrieve**: Mengambil seluruh basis kasus (`CaseBase`) dari database yang memiliki kemiripan gejala dengan input user.
+2.  **Reuse**: Menghitung nilai kemiripan menggunakan algoritma **Weighted Similarity**.
+3.  **Revise**: Memberikan klasifikasi diagnosa (*Strong*, *Possible*, atau *No Diagnosis*) dan mendeteksi ambiguitas jika skor antar peringkat terlalu dekat.
+4.  **Retain**: Menyimpan hasil konsultasi yang dikonfirmasi user sebagai `CandidateCase`, yang kemudian dapat di-*Approve* oleh Pakar untuk menjadi basis pengetahuan baru permanen.
 
-   1 cd C:\Kuliah\00sem4\pakar\projekcbr\backend
+---
 
-  Langkah 2: Install dependensi (Jika belum)
+## 🛠️ Tech Stack
 
-   1 npm install
+- **Backend**: Node.js, Express.js, TypeScript, Prisma ORM, PostgreSQL.
+- **Frontend**: React, TypeScript, Vite, TailwindCSS.
+- **Inference Engine**: Custom CBR Engine (Weighted Similarity).
 
-  Langkah 3: Sinkronisasi Prisma (Opsional - Karena sebelumnya Anda sudah migrasi & seeding)
-  Jika Anda membutuhkan reset atau me- load ulang schema terbaru, Anda bisa menjalankan:
-   1 npm run prisma:generate
+---
 
-  Langkah 4: Jalankan Server (Mode Development)
-  Gunakan script dev yang sudah disiapkan di package.json yang akan menjalankan server menggunakan tsx (TypeScript Execute) dengan mode watch (otomatis restart saat ada perubahan file).
-   1 npm run dev
+## 📡 Daftar API Endpoints
 
-  Jika berhasil, Anda akan melihat pesan di terminal seperti ini:
-  > Backend Sistem Pakar Padi CBR berjalan di port 5000
+Base URL: `http://localhost:5000/api`
 
-  ---
+### Kelompok Konsultasi (User)
+| Method | Endpoint | Deskripsi |
+| :--- | :--- | :--- |
+| `POST` | `/consultations` | Membuat sesi konsultasi baru. |
+| `POST` | `/consultations/:id/symptoms` | Menyimpan daftar ID Gejala yang dipilih user. |
+| `GET` | `/consultations/:id/diagnose` | Menjalankan mesin CBR untuk hasil diagnosa. |
+| `POST` | `/consultations/:id/confirm` | Konfirmasi diagnosa (Retain) -> Masuk ke antrean admin. |
 
-  3. Cara Menguji (Testing) API yang Sudah Berjalan
+### Kelompok Admin (Pakar)
+| Method | Endpoint | Deskripsi |
+| :--- | :--- | :--- |
+| `GET` | `/admin/candidates` | Melihat daftar kandidat kasus baru yang menunggu review. |
+| `GET` | `/admin/candidates/:id` | Melihat detail gejala dan info konsultasi dari satu kandidat. |
+| `POST` | `/admin/candidates/:id/approve` | Setujui kandidat -> Menjadi `CaseBase` permanen (Sistem Belajar). |
+| `POST` | `/admin/candidates/:id/reject` | Tolak kandidat kasus. |
 
-  Secara default, server berjalan di http://localhost:5000. Anda bisa mengujinya menggunakan browser atau aplikasi seperti Postman / Insomnia.
+### Utility
+| Method | Endpoint | Deskripsi |
+| :--- | :--- | :--- |
+| `GET` | `/health` | Cek status kesehatan server backend. |
 
-  A. Cek Status Server (Health Check)
-  Buka browser dan akses:
-  http://localhost:5000/api/health
-  (Ini akan merespons dengan status server yang menandakan aplikasi berjalan normal).
+---
 
-  B. Menguji Consultation API (Melalui Postman)
-   1. Buat Konsultasi:
-       * Method: POST
-       * URL: http://localhost:5000/api/consultations
-       * Anda akan mendapatkan ID Konsultasi.
-   2. Kirim Gejala:
-       * Method: POST
-       * URL: http://localhost:5000/api/consultations/<ID_KONSULTASI_DARI_LANGKAH_1>/symptoms
-       * Body (JSON): {"symptoms": ["id-gejala-1", "id-gejala-2"]} (Pastikan ID gejala diambil dari ID database, bukan kodenya seperti G01).
-   3. Dapatkan Diagnosa (CBR Engine Berjalan):
-       * Method: GET
-       * URL: http://localhost:5000/api/consultations/<ID_KONSULTASI_DARI_LANGKAH_1>/diagnose
-       * Anda akan melihat hasil output JSON yang berisi Penyakit, Similarity (%), dan Status Diagnosa.
+## 🛡️ Fitur Integritas Data (Hardening)
 
-  4. Melihat Data Database Secara Visual (Bonus)
-  Jika Anda ingin melihat data Gejala (untuk mengambil ID) atau melihat data Kasus, Anda dapat menggunakan Prisma Studio. Buka terminal baru di folder backend, lalu ketik:
+- **Duplicate Protection**: Satu konsultasi hanya bisa dikonfirmasi satu kali untuk mencegah duplikasi pengetahuan.
+- **Robust Code Generator**: Kode `C-xxxx` (Konsultasi), `CC-xxxx` (Kandidat), dan `Kxx` (Kasus Utama) di-generate menggunakan logika *Max+1* untuk menjamin keunikan.
+- **Strict Status Transition**: Alur status kandidat yang kaku (`UNDER_REVIEW` -> `APPROVED`/`REJECTED`) untuk menjaga kualitas data.
+- **Atomic Transactions**: Proses *Approval* dilakukan secara atomik; pembuatan basis kasus baru dan pembaruan status kandidat harus berhasil keduanya atau gagal keduanya.
 
-   1 npm run prisma:studio
-  Prisma Studio akan otomatis terbuka di browser Anda (biasanya di http://localhost:5555), menampilkan antarmuka tabel interaktif untuk database PostgreSQL Anda.
+---
+
+## 🏃 Cara Menjalankan Sistem
+
+### Prasyarat
+- Node.js (v18+)
+- PostgreSQL berjalan
+- File `backend/.env` sudah terkonfigurasi (`DATABASE_URL`)
+
+### Langkah-langkah
+1. **Setup Backend**:
+   ```bash
+   cd backend
+   npm install
+   npx prisma generate
+   npm run dev
+   ```
+   *Server berjalan di port 5000.*
+
+2. **Setup Database (Opsional)**:
+   ```bash
+   # Jalankan migrasi dan seeder awal
+   npx prisma migrate dev
+   npm run db:seed
+   ```
+
+3. **Setup Frontend**:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+---
+
+## 🧪 Panduan Pengetesan API (Postman/Insomnia)
+
+1. **Skenario Diagnosa**:
+   - Panggil `POST /api/consultations` untuk dapat ID.
+   - Panggil `POST /api/consultations/{id}/symptoms` dengan body `{"symptoms": ["uuid-1", "uuid-2"]}`.
+   - Panggil `GET /api/consultations/{id}/diagnose` untuk melihat skor similarity.
+
+2. **Skenario Retain (Sistem Belajar)**:
+   - Panggil `POST /api/consultations/{id}/confirm`.
+   - Cek `GET /api/admin/candidates` untuk melihat kandidat yang masuk.
+   - Panggil `POST /api/admin/candidates/{candidateId}/approve`.
+   - **Hasil**: Sistem sekarang memiliki kasus baru. Jika diagnosa dijalankan lagi dengan gejala yang sama, akurasi akan meningkat.
+
+---
+
+## 🔍 Visualisasi Database
+Gunakan Prisma Studio untuk melihat data secara tabel:
+```bash
+cd backend
+npx prisma studio
+```
+Akses melalui `http://localhost:5555`.

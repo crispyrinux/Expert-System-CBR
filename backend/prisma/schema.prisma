@@ -109,6 +109,7 @@ model Consultation {
 
   consultationSymptoms ConsultationSymptom[]
   diagnosisResults     DiagnosisResult[]
+  candidateCase        CandidateCase?
 }
 
 model ConsultationSymptom {
@@ -146,16 +147,18 @@ model DiagnosisResult {
 }
 
 model CandidateCase {
-  id          String              @id @default(cuid())
-  code        String              @unique @db.VarChar(20)
-  diseaseId   String
-  title       String              @db.VarChar(150)
-  description String?             @db.Text
-  status      CandidateCaseStatus @default(DRAFT)
-  approvedAt  DateTime?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  id             String              @id @default(cuid())
+  code           String              @unique @db.VarChar(20)
+  consultationId String?             @unique
+  diseaseId      String
+  title          String              @db.VarChar(150)
+  description    String?             @db.Text
+  status         CandidateCaseStatus @default(DRAFT)
+  approvedAt     DateTime?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
 
+  consultation          Consultation?          @relation(fields: [consultationId], references: [id], onDelete: SetNull)
   disease               Disease                @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
   candidateCaseSymptoms CandidateCaseSymptom[]
   approvedCaseBase      CaseBase?              @relation("CandidateCaseToCaseBase")

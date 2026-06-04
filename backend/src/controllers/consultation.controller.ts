@@ -5,10 +5,20 @@ import { addSymptomsSchema } from "../validators/consultation.validator.js";
 
 const prisma = new PrismaClient();
 
-// Helper untuk men-generate format kode unik seperti C-0001
+// Generator kode robust yang mengambil angka terakhir dari database
 async function generateConsultationCode() {
-  const count = await prisma.consultation.count();
-  const nextId = count + 1;
+  const lastRecord = await prisma.consultation.findFirst({
+    orderBy: { code: "desc" },
+    select: { code: true },
+  });
+
+  let nextId = 1;
+  if (lastRecord) {
+    const lastNumber = parseInt(lastRecord.code.replace("C-", ""));
+    if (!isNaN(lastNumber)) {
+      nextId = lastNumber + 1;
+    }
+  }
   return `C-${nextId.toString().padStart(4, "0")}`;
 }
 
@@ -39,7 +49,6 @@ export const consultationController = {
     try {
       const { id } = req.params;
 
-      // Validate request body
       const parsed = addSymptomsSchema.safeParse(req.body);
       if (!parsed.success) {
         res.status(400).json({ errors: parsed.error.format() });
@@ -48,7 +57,6 @@ export const consultationController = {
 
       const { symptoms: symptomIds } = parsed.data;
 
-      // Cek ketersediaan consultation
       const consultation = await prisma.consultation.findUnique({
         where: { id },
       });
@@ -63,7 +71,6 @@ export const consultationController = {
         return;
       }
 
-      // Cek ketersediaan gejala di database
       const existingSymptoms = await prisma.symptom.findMany({
         where: {
           id: { in: symptomIds },
@@ -75,7 +82,6 @@ export const consultationController = {
         return;
       }
 
-      // Reset gejala untuk konsultasi ini jika sudah ada, kemudian insert baru
       await prisma.$transaction(async (tx) => {
         await tx.consultationSymptom.deleteMany({
           where: { consultationId: id },
@@ -120,12 +126,9 @@ export const consultationController = {
 
       const selectedSymptomIds = consultation.consultationSymptoms.map((cs) => cs.symptomId);
 
-      // Jalankan CBR Engine
       const result = await cbrService.findBestDiagnosis(selectedSymptomIds);
 
-      // Simpan hasil dan update status di transaction
       await prisma.$transaction(async (tx) => {
-        // Hapus hasil lama jika ada (idempotency support)
         await tx.diagnosisResult.deleteMany({
           where: { consultationId: id },
         });
@@ -158,6 +161,96 @@ export const consultationController = {
           ambiguous: result.ambiguous,
         },
         topMatches: result.topMatches,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  // POST /consultations/:id/confirm
+  async confirmConsultation(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      // 1. Cek trace relasi formal untuk mencegah duplikasi (Duplicate Protection)
+      const existingCandidate = await prisma.candidateCase.findUnique({
+        where: { consultationId: id }
+      });
+
+      if (existingCandidate) {
+        res.status(409).json({ message: "Consultation already confirmed" });
+        return;
+      }
+
+      const consultation = await prisma.consultation.findUnique({
+        where: { id },
+        include: {
+          consultationSymptoms: {
+            include: {
+              symptom: {
+                include: {
+                  symptomWeight: true,
+                },
+              },
+            },
+          },
+          diagnosisResults: {
+            where: { rank: 1 },
+            include: { disease: true },
+          },
+        },
+      });
+
+      if (!consultation) {
+        res.status(404).json({ message: "Consultation not found" });
+        return;
+      }
+
+      if (consultation.status !== "COMPLETED") {
+        res.status(400).json({ message: "Consultation must be COMPLETED before confirmation" });
+        return;
+      }
+
+      const primaryDiagnosis = consultation.diagnosisResults[0];
+      if (!primaryDiagnosis) {
+        res.status(400).json({ message: "No diagnosis found for this consultation" });
+        return;
+      }
+
+      // Robust Candidate Code Generator (CC-xxxx)
+      const lastRecord = await prisma.candidateCase.findFirst({
+        orderBy: { code: "desc" },
+        select: { code: true }
+      });
+      let nextId = 1;
+      if (lastRecord) {
+        const lastNumber = parseInt(lastRecord.code.replace("CC-", ""));
+        if (!isNaN(lastNumber)) nextId = lastNumber + 1;
+      }
+      const candidateCode = `CC-${nextId.toString().padStart(4, "0")}`;
+
+      const candidateCase = await prisma.candidateCase.create({
+        data: {
+          code: candidateCode,
+          consultationId: id, // Menautkan relasi formal
+          diseaseId: primaryDiagnosis.diseaseId,
+          title: `Kasus Baru: ${primaryDiagnosis.disease.name}`,
+          description: `Berasal dari konsultasi ${consultation.code}`,
+          status: "UNDER_REVIEW",
+          candidateCaseSymptoms: {
+            create: consultation.consultationSymptoms.map((cs) => ({
+              symptomId: cs.symptomId,
+              weight: cs.symptom.symptomWeight?.weight ?? 1,
+            })),
+          },
+        },
+      });
+
+      res.status(201).json({
+        message: "Diagnosis confirmed and saved as candidate case",
+        candidateId: candidateCase.id,
+        status: candidateCase.status,
       });
     } catch (error) {
       console.error(error);
