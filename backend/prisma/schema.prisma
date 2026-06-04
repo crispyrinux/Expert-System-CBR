@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ConsultationStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+enum CandidateCaseStatus {
+  DRAFT
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum TestCaseStatus {
+  DRAFT
+  READY
+  PASSED
+  FAILED
+}
+
+model Disease {
+  id               String            @id @default(cuid())
+  code             String            @unique @db.VarChar(20)
+  name             String            @db.VarChar(150)
+  description      String?           @db.Text
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  caseBases        CaseBase[]
+  diagnosisResults DiagnosisResult[]
+  candidateCases   CandidateCase[]
+  testCases        TestCase[]
+}
+
+model Symptom {
+  id                    String                 @id @default(cuid())
+  code                  String                 @unique @db.VarChar(20)
+  description           String                 @db.Text
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  symptomWeight         SymptomWeight?
+  caseSymptoms          CaseSymptom[]
+  consultationSymptoms  ConsultationSymptom[]
+  candidateCaseSymptoms CandidateCaseSymptom[]
+}
+
+model SymptomWeight {
+  id        String   @id @default(cuid())
+  symptomId String   @unique
+  weight    Int
+  note      String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  symptom Symptom @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+}
+
+model CaseBase {
+  id                          String   @id @default(cuid())
+  code                        String   @unique @db.VarChar(20)
+  diseaseId                   String
+  title                       String   @db.VarChar(150)
+  description                 String?  @db.Text
+  solutions                   Json?
+  approvedFromCandidateCaseId String?  @unique
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+
+  disease                   Disease        @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+  caseSymptoms              CaseSymptom[]
+  approvedFromCandidateCase CandidateCase? @relation("CandidateCaseToCaseBase", fields: [approvedFromCandidateCaseId], references: [id], onDelete: SetNull)
+
+  @@index([diseaseId])
+}
+
+model CaseSymptom {
+  id         String   @id @default(cuid())
+  caseBaseId String
+  symptomId  String
+  weight     Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  caseBase CaseBase @relation(fields: [caseBaseId], references: [id], onDelete: Cascade)
+  symptom  Symptom  @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+
+  @@unique([caseBaseId, symptomId])
+  @@index([symptomId])
+}
+
+model Consultation {
+  id           String             @id @default(cuid())
+  code         String             @unique @db.VarChar(20)
+  patientLabel String?            @db.VarChar(150)
+  notes        String?            @db.Text
+  status       ConsultationStatus @default(DRAFT)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  consultationSymptoms ConsultationSymptom[]
+  diagnosisResults     DiagnosisResult[]
+}
+
+model ConsultationSymptom {
+  id             String   @id @default(cuid())
+  consultationId String
+  symptomId      String
+  weight         Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  symptom      Symptom      @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+
+  @@unique([consultationId, symptomId])
+  @@index([symptomId])
+}
+
+model DiagnosisResult {
+  id             String   @id @default(cuid())
+  consultationId String
+  diseaseId      String
+  rank           Int
+  similarity     Float
+  confidence     Float?
+  explanation    String?  @db.Text
+  isPrimary      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  disease      Disease      @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+
+  @@index([consultationId])
+  @@index([diseaseId])
+}
+
+model CandidateCase {
+  id          String              @id @default(cuid())
+  code        String              @unique @db.VarChar(20)
+  diseaseId   String
+  title       String              @db.VarChar(150)
+  description String?             @db.Text
+  status      CandidateCaseStatus @default(DRAFT)
+  approvedAt  DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  disease               Disease                @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+  candidateCaseSymptoms CandidateCaseSymptom[]
+  approvedCaseBase      CaseBase?              @relation("CandidateCaseToCaseBase")
+
+  @@index([diseaseId])
+}
+
+model CandidateCaseSymptom {
+  id              String   @id @default(cuid())
+  candidateCaseId String
+  symptomId       String
+  weight          Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  candidateCase CandidateCase @relation(fields: [candidateCaseId], references: [id], onDelete: Cascade)
+  symptom       Symptom       @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+
+  @@unique([candidateCaseId, symptomId])
+  @@index([symptomId])
+}
+
+model TestCase {
+  id                String         @id @default(cuid())
+  code              String         @unique @db.VarChar(20)
+  title             String         @db.VarChar(150)
+  inputSymptoms     Json
+  expectedDiseaseId String
+  notes             String?        @db.Text
+  status            TestCaseStatus @default(DRAFT)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  expectedDisease Disease @relation(fields: [expectedDiseaseId], references: [id], onDelete: Restrict)
+
+  @@index([expectedDiseaseId])
+}

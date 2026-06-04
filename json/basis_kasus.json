@@ -1,0 +1,221 @@
+[
+    {
+        "id_case": "K01",
+        "diagnosis": "Bercak dan Daun Cokelat (HP01)",
+        "gejala": [
+            "G01", "G02", "G03", "G04", "G05", "G06", "G07", "G09", "G35", "G36", "G48"
+        ],
+        "bobot_gejala": [
+            2, 2, 5, 5, 5, 5, 5, 1, 3, 1, 3
+        ],
+        "solusi": [
+            "Sanitasi dan Eradikasi: Bersihkan lahan dari sisa jerami, malai, atau gabah hampa dengan cara dibakar, dibenamkan ke dalam tanah, atau dijadikan pakan ternak. Lakukan penyiangan gulma secara rutin (terutama rumput benta) karena bisa menjadi inang alternatif jamur.",
+            "Pemilihan Benih & Varietas: Jangan gunakan benih dari tanaman yang sebelumnya terinfeksi. Gunakan varietas padi yang tahan terhadap bercak cokelat sesuai kecocokan lahan setempat (seperti varietas Kapuas, Adil, Puak, atau Randah Padang).",
+            "Tata Air dan Pemupukan: Perbaiki sistem pengairan lahan, terutama pada musim kemarau agar tanaman tidak stres air. Lakukan pemupukan berimbang untuk memperbaiki kesuburan tanah; aplikasikan kapur pertanian (CaO) dan pupuk Fosfat (P) yang dikombinasikan dengan pupuk Nitrogen (N) dan Kalium (K) sesuai dosis anjuran.",
+            "Perlakuan Benih (Seed Treatment): Sebelum disemai, rendam benih dalam air panas (suhu 55°C selama 10 menit) atau gunakan fungisida khusus perawatan benih (seperti berbahan aktif mankozeb / Dithane 45) untuk mematikan spora jamur yang menempel pada gabah."
+        ]
+    },
+    {
+        "id_case": "K02",
+        "diagnosis": "Blas (HP02)",
+        "gejala": [
+            "G02", "G08", "G09", "G10", "G11", "G27", "G28", "G29"
+        ],
+        "bobot_gejala": [
+            2, 5, 1, 5, 2, 5, 5, 4
+        ],
+        "solusi": [
+            "Pemilihan Benih & Pola Tanam: Gunakan benih yang sehat dan varietas yang tahan terhadap sebaran ras penyakit blas setempat. Terapkan pergiliran varietas (jangan menanam varietas yang sama terus-menerus), hindari sistem tanam yang terlalu rapat (sebar langsung), dan pastikan jadwal tanam tidak terlambat dari petani di sekitarnya.",
+            "Sanitasi Lahan: Lakukan sanitasi lingkungan secara intensif untuk membersihkan rerumputan yang bisa menjadi inang alternatif patogen. Gunakan jerami dan sisa-sisa tanaman yang ada sebagai kompos.",
+            "Pemupukan: Hindari penggunaan pupuk Nitrogen yang berlebihan (di atas dosis anjuran) karena dapat memicu kerentanan tanaman.",
+            "Perlakuan Benih (Seed Treatment): Lakukan perlakuan pada benih sebelum disebar untuk menyelamatkan fase persemaian dari infeksi dini (efektif melindungi hingga umur 30 hari).",
+            "Pengendalian Kimiawi: Lakukan penyemprotan fungisida sistemik (dengan bahan aktif seperti edifenphos, tetrachlorophthalide, kasugamycin, pyroquilon, benomyl, Isoprothiolane, atau thiophanate methyl) setidaknya dua kali. Waktu penyemprotan paling krusial adalah pada saat stadia anakan maksimum dan saat awal berbunga (5% malai keluar) untuk mencegah blas daun menyebar menjadi blas leher."
+        ]
+    },
+    {
+        "id_case": "K03",
+        "diagnosis": "Fusarium (HP03)",
+        "gejala": [
+            "G02", "G14", "G18", "G19", "G20", "G36", "G38"
+        ],
+        "bobot_gejala": [
+            2, 4, 1, 4, 3, 1, 3
+        ],
+        "solusi": [
+            "Pemilihan Varietas: Gunakan varietas padi lokal yang terbukti toleran atau tahan terhadap penyakit ini.",
+            "Praktik Budi Daya Sehat: Lakukan pemupukan secara berimbang dan atur jarak tanam agar tidak terlalu rapat. Lingkungan tumbuh yang baik akan membuat tanaman lebih sehat dan mampu mengatasi infeksi penyakit.",
+            "Perlakuan Benih (Seed Treatment): Pastikan menggunakan benih yang bebas penyakit. Lakukan perlakuan pada benih (seed treatment) sebelum penanaman, karena penyakit Fusarium ini merupakan patogen yang terbawa oleh benih (seed-borne).",
+            "Pengendalian Hayati: Aplikasikan agen hayati menggunakan spesies Fusarium non-patogenik, jamur Trichoderma spp., atau jenis mikroba antagonis lainnya untuk menekan pertumbuhan patogen."
+        ]
+    },
+    {
+        "id_case": "K04",
+        "diagnosis": "Hawar Daun Bakteri (Kresek) (HP04)",
+        "gejala": [
+            "G09", "G14", "G15", "G20", "G24", "G31", "G25", "G51", "G52", "G53"
+        ],
+        "bobot_gejala": [
+            1, 4, 5, 3, 3, 5, 4, 5, 5, 5
+        ],
+        "solusi": [
+            "Pemilihan Benih & Bibit: Jangan menggunakan benih yang berasal dari tanaman terinfeksi. Rendam benih di dalam air hangat (suhu 50°C selama 30 menit) untuk mengurangi populasi bakteri patogen di permukaan benih. Jangan menanam bibit yang sudah menunjukkan gejala, dan hindari kebiasaan memotong bagian ujung daun bibit saat pindah tanam agar bakteri tidak masuk melalui luka potongan.",
+            "Pola Tanam & Pengairan: Terapkan sistem tanam Jajar Legowo dan sistem pengairan berselang (intermittent irrigation). Sistem ini berfungsi untuk mengurangi kelembapan kanopi, embun, dan gesekan antar daun yang bisa menularkan bakteri.",
+            "Pemupukan Berimbang: Gunakan pupuk Nitrogen (N) dan Kalium (K) secara berimbang. Hindari penggunaan pupuk Nitrogen dengan dosis terlalu tinggi karena akan membuat tanaman padi menjadi lebih rentan terhadap serangan keparahan penyakit.",
+            "Sanitasi Lahan: Jaga kebersihan lingkungan sawah dengan membersihkan sisa-sisa tanaman terinfeksi (singgang) dan gulma yang berpotensi menjadi inang alternatif bakteri (seperti Leersia sp. atau Leptochloa chinensis).",
+            "Penggunaan Varietas Tahan: Gunakan varietas padi yang memiliki ketahanan spesifik terhadap strain/patotipe bakteri yang paling dominan menyebar di wilayah tanammu (misalnya varietas yang tahan patotipe III, IV, atau VIII).",
+            "Pengendalian Hayati: Aplikasikan agen hayati dari jenis bakteri antagonis seperti Paenibacillus polymyxa atau Pseudomonas fluorescens yang terbukti mampu menekan perkembangan penyakit.",
+            "Pengendalian Kimiawi: Sebagai langkah kimiawi, gunakan pestisida dengan bahan aktif yang dianjurkan, seperti difenokonazol, propikonazol, tembaga hidroksida, asibenzolar-s-metil, benomil, atau propineb."
+        ]
+    },
+    {
+        "id_case": "K05",
+        "diagnosis": "Tungro (HP05)",
+        "gejala": [
+            "G01", "G09", "G18", "G19", "G21", "G22", "G23", "G25", "G29", "G35", "G36", "G38", "G45", "G55"
+        ],
+        "bobot_gejala": [
+            2, 1, 1, 4, 5, 3, 4, 4, 4, 3, 1, 3, 3, 5
+        ],
+        "solusi": [
+            "Pola & Waktu Tanam: Lakukan penanaman secara serempak pada areal sehamparan (minimal seluas 40 ha) untuk memutus siklus hidup wereng hijau. Atur waktu tanam sekitar 30-45 hari sebelum puncak curah hujan. Terapkan sistem tanam jajar legowo 2 baris atau 4 baris untuk mengurangi pemencaran vektor.",
+            "Pemilihan Varietas: Gunakan varietas padi yang terbukti tahan terhadap penyakit tungro, seperti Inpari 7 Lanrang, Inpari 8, Inpari 9 Elo, Inpari 36 Lanrang, atau Inpari 37 Lanrang. Pastikan untuk tidak menanam varietas tahan tersebut secara terus-menerus guna mencegah berkembangnya wereng hijau biotipe baru.",
+            "Sanitasi & Eradikasi: Bersihkan lahan dari sumber inokulum sebelum membuat persemaian, termasuk membersihkan singgang, bibit voluntir (ceceran gabah), rumput teki, dan eceng. Jika ditemukan tanaman yang terserang tungro, segera lakukan eradikasi seawal mungkin dengan cara mencabut lalu membenamkan atau membakarnya.",
+            "Manajemen Air: Jaga ketersediaan air sawah pada kondisi kapasitas lapang (macak-macak). Jangan biarkan sawah mengering karena kondisi kering akan memicu wereng hijau untuk memencar dan memperluas area penyebaran virus tungro.",
+            "Pengendalian Vektor (Kimiawi): Lakukan pengamatan rutin. Jika tanaman terancam oleh populasi wereng hijau, segera aplikasikan insektisida/antifidan berbahan aktif imidakloprid atau thiametoxam untuk mematikan hama sekaligus menghambat penularan virus."
+        ]
+    },
+    {
+        "id_case": "K06",
+        "diagnosis": "Batang Busuk (HP06)",
+        "gejala": [
+            "G01", "G09", "G11", "G16", "G17", "G20", "G24", "G26", "G30", "G48", "G54"
+        ],
+        "bobot_gejala": [
+            2, 1, 2, 5, 5, 3, 3, 5, 5, 3, 5
+        ],
+        "solusi": [
+            "Pemilihan Benih: Gunakan varietas padi lokal yang toleran dan memiliki kemampuan regenerasi cepat.",
+            "Budi Daya Sehat: Terapkan pemupukan berimbang, renggangkan jarak tanam agar tidak terlalu rapat, dan pastikan sirkulasi air di petak sawah lancar secara berkala.",
+            "Sanitasi Lahan: Bersihkan gulma yang menjadi inang alternatif patogen. Komposkan gulma tersebut hingga benar-benar matang agar patogen mati sebelum dikembalikan ke tanah.",
+            "Pengendalian Hayati: Semprotkan Trichoderma harzianum (dosis formulasi 22,5 kg/ha dicampur 500 Liter air) secara merata pada bagian pangkal rumpun padi di sore hari.",
+            "Pengendalian Kimiawi (Langkah Terakhir): Aplikasikan fungisida berbahan aktif seperti difenokonazol, tebukonazol, atau mankozeb sesuai dosis anjuran."
+        ]
+    },
+    {
+        "id_case": "K07",
+        "diagnosis": "Hawar Jingga (HP07)",
+        "gejala": [
+            "G09", "G11", "G32", "G33", "G34", "G57"
+        ],
+        "bobot_gejala": [
+            1, 2, 5, 5, 4, 5
+        ],
+        "solusi": [
+            "Pemupukan Berimbang: Berikan kombinasi pupuk Urea, SP36, dan KCl secara berimbang untuk menekan laju perkembangan penyakit.",
+            "Manajemen Air (Pengeringan Lahan): Lakukan pengeringan petak lahan secara berkala untuk menurunkan kelembapan yang memicu bakteri.",
+            "Pengaturan Jarak Tanam: Atur jarak tanam agar kanopi (tajuk) penanaman lebih terbuka. Ini akan memperbaiki sirkulasi udara di area tanam.",
+            "Terapkan Teknik SPOT STOP: Segera lakukan pengendalian tepat pada titik awal munculnya gejala (meski masih intensitas ringan) untuk mencegah penyebaran bakteri Pseudomonas sp. dan Bacillus sp. ke rumpun lain."
+        ]
+    },
+    {
+        "id_case": "K08",
+        "diagnosis": "Kerdil Rumput (HP08)",
+        "gejala": [
+            "G22", "G23", "G24", "G39"
+        ],
+        "bobot_gejala": [
+            3, 4, 3, 5
+        ],
+        "solusi": [
+            "Pola Tanam: Lakukan penanaman padi secara serempak dalam satu hamparan.",
+            "Pemilihan Varietas: Gunakan varietas padi yang tahan terhadap hama wereng cokelat (seperti Inpari 13, Inpari 19, Inpari 31, Inpari 33, Inpari 42 Agritan GSR, Inpari 43 Agritan GSR, dan Inpari 47 WBC) serta lakukan pergiliran varietas.",
+            "Proteksi Persemaian: Pastikan lokasi pembibitan berada di area yang aman dan terisolasi dari sumber infeksi virus.",
+            "Eradikasi (Pemusnahan) Tanaman: Jika intensitas serangan masih ringan, segera cabut dan benamkan tanaman yang menunjukkan gejala. Jika serangan sudah terlanjur meluas, lakukan pembasmian (eradikasi) total dan segera tanam ulang.",
+            "Pengendalian Vektor: Lakukan pembasmian secara intensif terhadap hama Wereng Batang Cokelat, karena serangga ini merupakan pembawa dan penular utama virus kerdil rumput."
+        ]
+    },
+    {
+        "id_case": "K09",
+        "diagnosis": "Kerdil Hampa (HP09)",
+        "gejala": [
+            "G22", "G36", "G40", "G41"
+        ],
+        "bobot_gejala": [
+            3, 1, 5, 5
+        ],
+        "solusi": [
+            "Pola Tanam: Lakukan penanaman padi secara serempak.",
+            "Pemilihan Varietas: Gunakan varietas yang tahan terhadap hama wereng batang cokelat (seperti Inpari 13, Inpari 19, Inpari 31, Inpari 33, Inpari 42 Agritan GSR, Inpari 43 Agritan GSR, dan Inpari 47 WBC) serta terapkan pergiliran varietas.",
+            "Proteksi Persemaian: Pastikan lokasi pembibitan berada di lingkungan yang aman dan dijauhkan dari sumber inokulum virus.",
+            "Sanitasi dan Eradikasi: Bersihkan sisa tanaman terinfeksi dan gulma. Pada serangan ringan, segera cabut dan benamkan tanaman yang bergejala. Pada serangan luas, lakukan eradikasi (pemusnahan total) dan segera tanam ulang.",
+            "Pengendalian Vektor: Lakukan pengendalian dini terhadap hama Wereng Batang Cokelat untuk menekan terbentuknya populasi wereng bersayap (makroptera) yang menjadi penular utama virus ini."
+        ]
+    },
+    {
+        "id_case": "K10",
+        "diagnosis": "Busuk Pelepah Daun (HP10)",
+        "gejala": [
+            "G01", "G02", "G12", "G13", "G18", "G34", "G35", "G36", "G38", "G44", "G45", "G48", "G56"
+        ],
+        "bobot_gejala": [
+            2, 2, 5, 5, 1, 4, 3, 1, 3, 5, 3, 3, 5
+        ],
+        "solusi": [
+            "Seleksi Benih & Sanitasi: Pastikan melakukan seleksi benih yang ketat, terutama jika benih berasal dari daerah yang endemis penyakit busuk pelepah. Bersihkan juga gulma di sekitar lahan karena bisa menjadi inang alternatif bagi patogen jamur ini.",
+            "Pengaturan Jarak Tanam: Atur jarak tanam agar tidak terlalu rapat. Hal ini sangat krusial untuk mencegah terjadinya gesekan antar tanaman yang bisa mengakibatkan luka, karena luka tersebut akan menjadi pintu masuk infeksi jamur.",
+            "Pemupukan Berimbang: Aplikasikan pupuk secara berimbang. Hindari pemberian pupuk Urea (Nitrogen) yang berlebihan karena dapat mempercepat perkembangan penyakit ini.",
+            "Pengendalian OPT Lain: Segera kendalikan hama atau organisme pengganggu tumbuhan (OPT) lain di lahan yang berpotensi melukai tanaman, karena luka mempermudah terjadinya infeksi sekunder oleh penyakit busuk pelepah.",
+            "Pengamatan Dini: Tingkatkan pengamatan rutin secara dini untuk mengenali tanda awalnya. Segera waspadai jika melihat bercak lonjong berwarna kelabu kehijauan pada pelepah yang berdekatan dengan permukaan air."
+        ]
+    },
+    {
+        "id_case": "K11",
+        "diagnosis": "Sundep dan Beluk (HP11)",
+        "gejala": [
+            "G11", "G18", "G42", "G43"
+        ],
+        "bobot_gejala": [
+            2, 1, 5, 5
+        ],
+        "solusi": [
+            "Pengaturan Pola Tanam: Lakukan penanaman padi secara serentak, terapkan rotasi dengan tanaman selain padi untuk memutus siklus hidup hama, dan atur waktu tanam minimal 15 hari setelah puncak penerbangan ngengat.",
+            "Pengendalian Fisik & Mekanik: Kumpulkan dan musnahkan kelompok telur di area persemaian maupun pertanaman. Pasang perangkap cahaya (light trap). Saat panen, potong pangkal jerami serendah mungkin lalu genangi lahan dengan air setinggi 10 cm agar sisa jerami membusuk sehingga larva dan pupa mati.",
+            "Pengendalian Hayati: Lepaskan agen hayati parasitoid telur (seperti Trichogramma japonicum) dengan dosis 20 pias/ha sejak awal pertanaman.",
+            "Pengendalian Kimiawi: Aplikasikan insektisida tepat 4 hari setelah ngengat pertama kali tertangkap oleh perangkap cahaya. Gunakan insektisida butiran (bahan aktif karbofuran) pada fase vegetatif, dan insektisida semprot (bahan aktif spinetoram, klorantraniliprol, atau dimehipo) pada fase generatif. Lakukan penyemprotan pada saat tidak ada embun (pukul 08.00-11.00 atau sore hari).",
+            "Tindakan Preventif: Lakukan pemantauan fluktuasi populasi ngengat secara rutin menggunakan light trap sejak dini."
+        ]
+    },
+    {
+        "id_case": "K12",
+        "diagnosis": "Hama Putih Palsu (HP12)",
+        "gejala": [
+            "G18", "G36", "G37", "G49"
+        ],
+        "bobot_gejala": [
+            1, 1, 5, 5
+        ],
+        "solusi": [
+            "Manajemen Air (Pengeringan): Keringkan air pada area persemaian dan petak sawah selama 5-7 hari. Larva hama ini sangat bergantung pada air, sehingga pengeringan singkat akan memutus siklus hidup dan membunuh larva.",
+            "Pelestarian Musuh Alami: Manfaatkan dan jaga kelestarian musuh alami di sekitar lahan, seperti parasitoid (Apanteles sp.) serta predator alami seperti laba-laba sawah, capung kecil, dan cocopet (earwig).",
+            "Pengendalian Kimiawi (Langkah Terakhir): Tanaman muda umumnya bisa pulih sendiri dengan menumbuhkan daun baru. Oleh karena itu, insektisida hanya diaplikasikan jika tingkat kerusakan pada daun bendera sudah melebihi 45% (khususnya pada fase primordia hingga anakan maksimum).",
+            "Bahan Aktif Insektisida: Jika ambang batas serangan terlewati, gunakan insektisida berbahan aktif abamektin, tiosiklam hidrogen oksalat, indosakarb, fipronil, imidakloprid, klorantraniliprol, lufenuron, atau dimehipo."
+        ]
+    },
+    {
+        "id_case": "K13",
+        "diagnosis": "Gosong Palsu (HP13)",
+        "gejala": [
+            "G45", "G46", "G47", "G50"
+        ],
+        "bobot_gejala": [
+            3, 5, 5, 5
+        ],
+        "solusi": [
+            "Pola Tanam & Sanitasi: Gunakan varietas yang tahan dan lakukan penanaman secara serempak. Kelola lahan dengan baik dengan cara menjaga sistem drainase agar lahan tidak terlalu lembap, serta segera benamkan sisa jerami yang terinfeksi agar tidak menjadi sumber inokulum.",
+            "Pemupukan Berimbang: Terapkan pemupukan yang berimbang dan hindari kelebihan pupuk Nitrogen (seperti Urea), karena nitrogen berlebih memicu kerentanan tanaman terhadap jamur ini.",
+            "Perlakuan Benih (Seed Treatment): Lakukan perendaman benih menggunakan fungisida atau aplikasikan agen hayati sebelum benih disemai untuk mematikan spora jamur bawaan benih.",
+            "Pengendalian Hayati & Nabati: Aplikasikan jamur Trichoderma harzianum pada fase awal tanam. Semprotkan bakteri Bacillus subtilis pada fase primordia (pembentukan) malai. Sebagai pencegahan, semprotkan pestisida nabati (ekstrak daun mimba, serai wangi, atau bawang putih) menjelang pembungaan dengan interval 5-7 hari.",
+            "Pengendalian Kimiawi (Langkah Terakhir): Jika serangan meluas, semprotkan fungisida berbahan aktif propikonazol, tebukonazol, atau difenokonazol pada awal fase pembungaan (dapat diulang 7-10 hari kemudian). Selalu perhatikan Pre-Harvest Interval (PHI) agar tidak ada residu racun saat panen."
+        ]
+    }
+]

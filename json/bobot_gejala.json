@@ -1,0 +1,344 @@
+[
+  {
+    "kode_gejala": "G01",
+    "bobot": 2,
+    "keterangan": "Bercak/serangan pada pelepah (terutama bagian bawah/anakan)",
+    "muncul_di_penyakit": ["HP01", "HP05", "HP06", "HP10"]
+  },
+  {
+    "kode_gejala": "G02",
+    "bobot": 2,
+    "keterangan": "Muncul bercak pada buku malai dan tangkainya",
+    "muncul_di_penyakit": ["HP01", "HP02", "HP03", "HP10"]
+  },
+  {
+    "kode_gejala": "G03",
+    "bobot": 5,
+    "keterangan": "Menyerang buah yang baru tumbuh",
+    "muncul_di_penyakit": ["HP01"]
+  },
+  {
+    "kode_gejala": "G04",
+    "bobot": 5,
+    "keterangan": "Menyerang pada kecambah",
+    "muncul_di_penyakit": ["HP01"]
+  },
+  {
+    "kode_gejala": "G05",
+    "bobot": 5,
+    "keterangan": "Biji bercak cokelat tetapi tetap berisi",
+    "muncul_di_penyakit": ["HP01"]
+  },
+  {
+    "kode_gejala": "G06",
+    "bobot": 5,
+    "keterangan": "Biji kecambah busuk",
+    "muncul_di_penyakit": ["HP01"]
+  },
+  {
+    "kode_gejala": "G07",
+    "bobot": 5,
+    "keterangan": "Kecambah mati",
+    "muncul_di_penyakit": ["HP01"]
+  },
+  {
+    "kode_gejala": "G08",
+    "bobot": 5,
+    "keterangan": "Padi dewasa busuk dan kering",
+    "muncul_di_penyakit": ["HP02"]
+  },
+  {
+    "kode_gejala": "G09",
+    "bobot": 1,
+    "keterangan": "Muncul bercak pada daun",
+    "muncul_di_penyakit": ["HP01", "HP02", "HP04", "HP05", "HP06", "HP07"]
+  },
+  {
+    "kode_gejala": "G10",
+    "bobot": 5,
+    "keterangan": "Pemasakan makanan terhambat",
+    "muncul_di_penyakit": ["HP02"]
+  },
+  {
+    "kode_gejala": "G11",
+    "bobot": 2,
+    "keterangan": "Bulir gabah menjadi hampa / malai tidak berisi",
+    "muncul_di_penyakit": ["HP02", "HP06", "HP07", "HP11"]
+  },
+  {
+    "kode_gejala": "G12",
+    "bobot": 5,
+    "keterangan": "Jumlah gabah menurun",
+    "muncul_di_penyakit": ["HP10"]
+  },
+  {
+    "kode_gejala": "G13",
+    "bobot": 5,
+    "keterangan": "Kualitas gabah kurang baik",
+    "muncul_di_penyakit": ["HP10"]
+  },
+  {
+    "kode_gejala": "G14",
+    "bobot": 4,
+    "keterangan": "Menyerang titik tumbuh padi",
+    "muncul_di_penyakit": ["HP03", "HP04"]
+  },
+  {
+    "kode_gejala": "G15",
+    "bobot": 5,
+    "keterangan": "Terdapat garis-garis di antara tulang daun",
+    "muncul_di_penyakit": ["HP04"]
+  },
+  {
+    "kode_gejala": "G16",
+    "bobot": 5,
+    "keterangan": "Batang melepuh",
+    "muncul_di_penyakit": ["HP06"]
+  },
+  {
+    "kode_gejala": "G17",
+    "bobot": 5,
+    "keterangan": "Batang berisi cairan kehitaman",
+    "muncul_di_penyakit": ["HP06"]
+  },
+  {
+    "kode_gejala": "G18",
+    "bobot": 1,
+    "keterangan": "Daun layu, menggulung, dan mengering (mati)",
+    "muncul_di_penyakit": ["HP03", "HP05", "HP10", "HP11", "HP12"]
+  },
+  {
+    "kode_gejala": "G19",
+    "bobot": 4,
+    "keterangan": "Daun terkulai",
+    "muncul_di_penyakit": ["HP03", "HP05"]
+  },
+  {
+    "kode_gejala": "G20",
+    "bobot": 3,
+    "keterangan": "Akar membusuk",
+    "muncul_di_penyakit": ["HP03", "HP04", "HP06"]
+  },
+  {
+    "kode_gejala": "G21",
+    "bobot": 5,
+    "keterangan": "Menyerang semua bagian tanaman",
+    "muncul_di_penyakit": ["HP05"]
+  },
+  {
+    "kode_gejala": "G22",
+    "bobot": 3,
+    "keterangan": "Tanaman tumbuh kerdil / pertumbuhan terhambat",
+    "muncul_di_penyakit": ["HP05", "HP08", "HP09"]
+  },
+  {
+    "kode_gejala": "G23",
+    "bobot": 4,
+    "keterangan": "Daun berubah warna menjadi hijau kekuningan atau pucat",
+    "muncul_di_penyakit": ["HP05", "HP08"]
+  },
+  {
+    "kode_gejala": "G24",
+    "bobot": 3,
+    "keterangan": "Anakan bertambah banyak / muncul roset yang rimbun",
+    "muncul_di_penyakit": ["HP04", "HP06", "HP08"]
+  },
+  {
+    "kode_gejala": "G25",
+    "bobot": 4,
+    "keterangan": "Jumlah anakan berkurang drastis",
+    "muncul_di_penyakit": ["HP04", "HP05"]
+  },
+  {
+    "kode_gejala": "G26",
+    "bobot": 5,
+    "keterangan": "Malai menjadi kecil",
+    "muncul_di_penyakit": ["HP06"]
+  },
+  {
+    "kode_gejala": "G27",
+    "bobot": 5,
+    "keterangan": "Bercak berwarna kecokelatan di tepian dan putih keabuan di tengah",
+    "muncul_di_penyakit": ["HP02"]
+  },
+  {
+    "kode_gejala": "G28",
+    "bobot": 5,
+    "keterangan": "Bentuk bercak belah ketupat atau lonjong",
+    "muncul_di_penyakit": ["HP02"]
+  },
+  {
+    "kode_gejala": "G29",
+    "bobot": 4,
+    "keterangan": "Pangkal malai / leher panikel mencokelat",
+    "muncul_di_penyakit": ["HP02", "HP05"]
+  },
+  {
+    "kode_gejala": "G30",
+    "bobot": 5,
+    "keterangan": "Bercak berwarna hijau keabuan / abu-abu kehijauan",
+    "muncul_di_penyakit": ["HP06"]
+  },
+  {
+    "kode_gejala": "G31",
+    "bobot": 5,
+    "keterangan": "Bentuk bercak garis kering memanjang",
+    "muncul_di_penyakit": ["HP04"]
+  },
+  {
+    "kode_gejala": "G32",
+    "bobot": 5,
+    "keterangan": "Bercak berwarna hijau kuning terang",
+    "muncul_di_penyakit": ["HP07"]
+  },
+  {
+    "kode_gejala": "G33",
+    "bobot": 5,
+    "keterangan": "Bentuk bercak garis basah memanjang",
+    "muncul_di_penyakit": ["HP07"]
+  },
+  {
+    "kode_gejala": "G34",
+    "bobot": 4,
+    "keterangan": "Daun kering berwarna abu-abu keputihan",
+    "muncul_di_penyakit": ["HP07", "HP10"]
+  },
+  {
+    "kode_gejala": "G35",
+    "bobot": 3,
+    "keterangan": "Bercak cokelat dilingkari warna kuning atau merah kecokelatan",
+    "muncul_di_penyakit": ["HP01", "HP05", "HP10"]
+  },
+  {
+    "kode_gejala": "G36",
+    "bobot": 1,
+    "keterangan": "Daun tumbuh menggulung / memelintir",
+    "muncul_di_penyakit": ["HP01", "HP03", "HP05", "HP09", "HP10", "HP12"]
+  },
+  {
+    "kode_gejala": "G37",
+    "bobot": 5,
+    "keterangan": "Muncul garis putih transparan",
+    "muncul_di_penyakit": ["HP12"]
+  },
+  {
+    "kode_gejala": "G38",
+    "bobot": 3,
+    "keterangan": "Daun menguning hingga jingga/oranye dari pucuk ke pangkal",
+    "muncul_di_penyakit": ["HP03", "HP05", "HP10"]
+  },
+  {
+    "kode_gejala": "G39",
+    "bobot": 5,
+    "keterangan": "Batang terlihat tegak dan kaku",
+    "muncul_di_penyakit": ["HP08"]
+  },
+  {
+    "kode_gejala": "G40",
+    "bobot": 5,
+    "keterangan": "Daun tumbuh berlekuk-lekuk atau sobek",
+    "muncul_di_penyakit": ["HP09"]
+  },
+  {
+    "kode_gejala": "G41",
+    "bobot": 5,
+    "keterangan": "Malai tidak keluar",
+    "muncul_di_penyakit": ["HP09"]
+  },
+  {
+    "kode_gejala": "G42",
+    "bobot": 5,
+    "keterangan": "Tunas mengalami pembusukan",
+    "muncul_di_penyakit": ["HP11"]
+  },
+  {
+    "kode_gejala": "G43",
+    "bobot": 5,
+    "keterangan": "Batang tanaman roboh",
+    "muncul_di_penyakit": ["HP11"]
+  },
+  {
+    "kode_gejala": "G44",
+    "bobot": 5,
+    "keterangan": "Bercak berwarna cokelat abu-abu",
+    "muncul_di_penyakit": ["HP10"]
+  },
+  {
+    "kode_gejala": "G45",
+    "bobot": 3,
+    "keterangan": "Bulir padi menghitam / bercak hitam cokelat pada kulit gabah",
+    "muncul_di_penyakit": ["HP05", "HP10", "HP13"]
+  },
+  {
+    "kode_gejala": "G46",
+    "bobot": 5,
+    "keterangan": "Bulir ditumbuhi spora",
+    "muncul_di_penyakit": ["HP13"]
+  },
+  {
+    "kode_gejala": "G47",
+    "bobot": 5,
+    "keterangan": "Spora berwarna kuning keemasan",
+    "muncul_di_penyakit": ["HP13"]
+  },
+  {
+    "kode_gejala": "G48",
+    "bobot": 3,
+    "keterangan": "Bentuk bercak oval atau elips/lingkaran",
+    "muncul_di_penyakit": ["HP01", "HP06", "HP10"]
+  },
+  {
+    "kode_gejala": "G49",
+    "bobot": 5,
+    "keterangan": "Adanya ngengat berwarna kuning cokelat",
+    "muncul_di_penyakit": ["HP12"]
+  },
+  {
+    "kode_gejala": "G50",
+    "bobot": 5,
+    "keterangan": "Biji padi abnormal antara satu dan yang lain",
+    "muncul_di_penyakit": ["HP13"]
+  },
+  {
+    "kode_gejala": "G51",
+    "bobot": 5,
+    "keterangan": "Akar tanaman lebih sedikit",
+    "muncul_di_penyakit": ["HP04"]
+  },
+  {
+    "kode_gejala": "G52",
+    "bobot": 5,
+    "keterangan": "Anakan tumbuh lemas",
+    "muncul_di_penyakit": ["HP04"]
+  },
+  {
+    "kode_gejala": "G53",
+    "bobot": 5,
+    "keterangan": "Anakan tumbuh tegak",
+    "muncul_di_penyakit": ["HP04"]
+  },
+  {
+    "kode_gejala": "G54",
+    "bobot": 5,
+    "keterangan": "Bercak-bercak berwarna cokelat",
+    "muncul_di_penyakit": ["HP06"]
+  },
+  {
+    "kode_gejala": "G55",
+    "bobot": 5,
+    "keterangan": "Bercak berwarna kelabu / keputihan",
+    "muncul_di_penyakit": ["HP05"]
+  },
+  {
+    "kode_gejala": "G56",
+    "bobot": 5,
+    "keterangan": "Daun muda terlihat seperti mottle",
+    "muncul_di_penyakit": ["HP10"]
+  },
+  {
+    "kode_gejala": "G57",
+    "bobot": 5,
+    "keterangan": "Bercak garis berwarna jingga kekuningan (red stripe)",
+    "muncul_di_penyakit": ["HP07"]
+  }
+]

@@ -1,0 +1,54 @@
+[
+    { 
+        "kode_unik": "HP01", 
+        "nama_penyakit": "Bercak dan Daun Coklat" 
+    },
+    { 
+        "kode_unik": "HP02", 
+        "nama_penyakit": "Blas" 
+    },
+    { 
+        "kode_unik": "HP03", 
+        "nama_penyakit": "Fusarium" 
+    },
+    { 
+        "kode_unik": "HP04", 
+        "nama_penyakit": "Hawar Daun Bakteri (Kresek)" 
+    },
+    { 
+        "kode_unik": "HP05", 
+        "nama_penyakit": "Tungro" 
+    },
+    { 
+        "kode_unik": "HP06", 
+        "nama_penyakit": "Batang Busuk" 
+    },
+    { 
+        "kode_unik": "HP07", 
+        "nama_penyakit": "Hawar Jingga" 
+    },
+    { 
+        "kode_unik": "HP08", 
+        "nama_penyakit": "Kerdil Rumput" 
+    },
+    { 
+        "kode_unik": "HP09", 
+        "nama_penyakit": "Kerdil Hampa" 
+    },
+    { 
+        "kode_unik": "HP10", 
+        "nama_penyakit": "Busuk Pelepah Daun" 
+    },
+    { 
+        "kode_unik": "HP11", 
+        "nama_penyakit": "Sundep dan Beluk" 
+    },
+    { 
+        "kode_unik": "HP12", 
+        "nama_penyakit": "Hama Putih Palsu" 
+    },
+    { 
+        "kode_unik": "HP13", 
+        "nama_penyakit": "Gosong Palsu" 
+    }
+]

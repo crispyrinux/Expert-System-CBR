@@ -1,0 +1,230 @@
+[
+    { 
+        "kode_unik": "G01", 
+        "gejala": "Bercak/serangan pada pelepah (terutama bagian bawah/anakan)" 
+    },
+    { 
+        "kode_unik": "G02", 
+        "gejala": "Menyerang/muncul bercak pada buku malai dan tangkainya" 
+    },
+    { 
+        "kode_unik": "G03", 
+        "gejala": "Menyerang buah yang baru tumbuh" 
+    },
+    { 
+        "kode_unik": "G04", 
+        "gejala": "Menyerang pada kecambah" 
+    },
+    { 
+        "kode_unik": "G05", 
+        "gejala": "Biji bercak cokelat tetapi tetap berisi" 
+    },
+    { 
+        "kode_unik": "G06", 
+        "gejala": "Biji kecambah busuk" 
+    },
+    { 
+        "kode_unik": "G07", 
+        "gejala": "Kecambah mati" 
+    },
+    { 
+        "kode_unik": "G08", 
+        "gejala": "Padi dewasa busuk dan kering" 
+    },
+    { 
+        "kode_unik": "G09", 
+        "gejala": "Muncul bercak pada daun" 
+    },
+    { 
+        "kode_unik": "G10", 
+        "gejala": "Pemasakan makanan terhambat" 
+    },
+    { 
+        "kode_unik": "G11", 
+        "gejala": "Bulir gabah menjadi hampa / malai tidak berisi" 
+    },
+    { 
+        "kode_unik": "G12", 
+        "gejala": "Jumlah gabah menurun" 
+    },
+    { 
+        "kode_unik": "G13", 
+        "gejala": "Kualitas gabah kurang baik" 
+    },
+    { 
+        "kode_unik": "G14", 
+        "gejala": "Menyerang titik tumbuh padi" 
+    },
+    { 
+        "kode_unik": "G15", 
+        "gejala": "Terdapat garis-garis di antara tulang daun" 
+    },
+    { 
+        "kode_unik": "G16", 
+        "gejala": "Batang melepuh" 
+    },
+    { 
+        "kode_unik": "G17", 
+        "gejala": "Batang berisi cairan kehitaman" 
+    },
+    { 
+        "kode_unik": "G18", 
+        "gejala": "Daun layu, menggulung, dan mengering (mati)" 
+    },
+    { 
+        "kode_unik": "G19", 
+        "gejala": "Daun terkulai" 
+    },
+    { 
+        "kode_unik": "G20", 
+        "gejala": "Akar membusuk" 
+    },
+    { 
+        "kode_unik": "G21", 
+        "gejala": "Menyerang semua bagian tanaman" 
+    },
+    { 
+        "kode_unik": "G22", 
+        "gejala": "Tanaman tumbuh kerdil / pertumbuhan terhambat" 
+    },
+    { 
+        "kode_unik": "G23", 
+        "gejala": "Daun berubah warna menjadi hijau kekuningan atau pucat" 
+    },
+    { 
+        "kode_unik": "G24", 
+        "gejala": "Anakan bertambah banyak / muncul roset yang rimbun" 
+    },
+    { 
+        "kode_unik": "G25", 
+        "gejala": "Jumlah anakan berkurang drastis" 
+    },
+    { 
+        "kode_unik": "G26", 
+        "gejala": "Malai menjadi kecil" 
+    },
+    { 
+        "kode_unik": "G27", 
+        "gejala": "Bercak berwarna kecokelatan di tepian dan putih keabuan di tengah" 
+    },
+    { 
+        "kode_unik": "G28", 
+        "gejala": "Bentuk bercak belah ketupat atau lonjong" 
+    },
+    { 
+        "kode_unik": "G29", 
+        "gejala": "Pangkal malai / daerah leher panikel mencokelat" 
+    },
+    { 
+        "kode_unik": "G30", 
+        "gejala": "Bercak berwarna hijau keabuan / abu-abu kehijauan" 
+    },
+    { 
+        "kode_unik": "G31", 
+        "gejala": "Bentuk bercak garis kering memanjang" 
+    },
+    { 
+        "kode_unik": "G32", 
+        "gejala": "Bercak berwarna hijau kuning terang" 
+    },
+    { 
+        "kode_unik": "G33", 
+        "gejala": "Bentuk bercak garis basah memanjang" 
+    },
+    { 
+        "kode_unik": "G34", 
+        "gejala": "Daun kering berwarna abu-abu keputihan" 
+    },
+    { 
+        "kode_unik": "G35", 
+        "gejala": "Bercak cokelat dilingkari warna kuning atau merah kecokelatan" 
+    },
+    { 
+        "kode_unik": "G36", 
+        "gejala": "Daun tumbuh menggulung / memelintir" 
+    },
+    { 
+        "kode_unik": "G37", 
+        "gejala": "Muncul garis putih transparan" 
+    },
+    { 
+        "kode_unik": "G38", 
+        "gejala": "Daun menguning hingga jingga/oranye dari pucuk ke pangkal" 
+    },
+    { 
+        "kode_unik": "G39", 
+        "gejala": "Batang terlihat tegak dan kaku" 
+    },
+    { 
+        "kode_unik": "G40", 
+        "gejala": "Daun tumbuh berlekuk-lekuk atau sobek" 
+    },
+    { 
+        "kode_unik": "G41", 
+        "gejala": "Malai tidak keluar" 
+    },
+    { 
+        "kode_unik": "G42", 
+        "gejala": "Tunas mengalami pembusukan" 
+    },
+    { 
+        "kode_unik": "G43", 
+        "gejala": "Batang tanaman roboh" 
+    },
+    { 
+        "kode_unik": "G44", 
+        "gejala": "Bercak berwarna cokelat abu-abu" 
+    },
+    { 
+        "kode_unik": "G45", 
+        "gejala": "Bulir padi menghitam / ada bercak hitam cokelat pada kulit gabah" 
+    },
+    { 
+        "kode_unik": "G46", 
+        "gejala": "Bulir ditumbuhi spora" 
+    },
+    { 
+        "kode_unik": "G47", 
+        "gejala": "Spora berwarna kuning keemasan" 
+    },
+    { 
+        "kode_unik": "G48", 
+        "gejala": "Bentuk bercak oval atau elips/lingkaran" 
+    },
+    { 
+        "kode_unik": "G49", 
+        "gejala": "Adanya ngengat berwarna kuning cokelat" 
+    },
+    { 
+        "kode_unik": "G50", 
+        "gejala": "Biji padi abnormal antara satu dan yang lain" 
+    },
+    { 
+        "kode_unik": "G51", 
+        "gejala": "Akar tanaman lebih sedikit" 
+    },
+    { 
+        "kode_unik": "G52", 
+        "gejala": "Anakan tumbuh lemas" 
+    },
+    { 
+        "kode_unik": "G53", 
+        "gejala": "Anakan tumbuh tegak" 
+    },
+    { 
+        "kode_unik": "G54", 
+        "gejala": "Bercak-bercak berwarna cokelat" 
+    },
+    { 
+        "kode_unik": "G55", 
+        "gejala": "Bercak berwarna kelabu / keputihan" 
+    },
+    { 
+        "kode_unik": "G56", 
+        "gejala": "Daun muda terlihat seperti mottle" 
+    },
+    { 
+        "kode_unik": "G57", 
+        "gejala": "Muncul titik kecil lurus atau bercak garis berwarna jingga kekuningan (red stripe)" 
+    }
+]

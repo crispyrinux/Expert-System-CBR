@@ -1,0 +1,77 @@
+[
+  {
+    "id_test": "TC01",
+    "gejala_input": ["G46", "G47", "G50", "G45"],
+    "expected_result": "HP13"
+  },
+  {
+    "id_test": "TC02",
+    "gejala_input": ["G27", "G28", "G08", "G10"],
+    "expected_result": "HP02"
+  },
+  {
+    "id_test": "TC03",
+    "gejala_input": ["G42", "G43", "G11", "G18"],
+    "expected_result": "HP11"
+  },
+  {
+    "id_test": "TC04",
+    "gejala_input": ["G39", "G22", "G23", "G24"],
+    "expected_result": "HP08"
+  },
+  {
+    "id_test": "TC05",
+    "gejala_input": ["G37", "G49", "G18", "G36"],
+    "expected_result": "HP12"
+  },
+  {
+    "id_test": "TC06",
+    "gejala_input": ["G16", "G17", "G26", "G30"],
+    "expected_result": "HP06"
+  },
+  {
+    "id_test": "TC07",
+    "gejala_input": ["G32", "G33", "G57", "G09"],
+    "expected_result": "HP07"
+  },
+  {
+    "id_test": "TC08",
+    "gejala_input": ["G40", "G41", "G22"],
+    "expected_result": "HP09"
+  },
+  {
+    "id_test": "TC09",
+    "gejala_input": ["G51", "G52", "G53", "G15", "G09"],
+    "expected_result": "HP04"
+  },
+  {
+    "id_test": "TC10",
+    "gejala_input": ["G21", "G55", "G23", "G19", "G09"],
+    "expected_result": "HP05"
+  },
+  {
+    "id_test": "TC11",
+    "gejala_input": ["G03", "G05", "G06", "G09"],
+    "expected_result": "HP01"
+  },
+  {
+    "id_test": "TC12",
+    "gejala_input": ["G14", "G19", "G20", "G02"],
+    "expected_result": "HP03"
+  },
+  {
+    "id_test": "TC13",
+    "gejala_input": ["G22", "G25", "G29", "G09"],
+    "expected_result": "HP05"
+  },
+  {
+    "id_test": "TC14",
+    "gejala_input": ["G12", "G13", "G44", "G56"],
+    "expected_result": "HP10"
+  },
+  {
+    "id_test": "TC15",
+    "gejala_input": ["G11", "G09", "G18"],
+    "expected_result": "HP07"
+  }
+]
