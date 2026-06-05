@@ -4,6 +4,7 @@ import express from "express";
 import healthRoute from "./routes/health.route.js";
 import consultationRoute from "./routes/consultation.route.js";
 import adminRoute from "./routes/admin.route.js";
+import masterRoute from "./routes/master.route.js";
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/health", healthRoute);
 app.use("/api/consultations", consultationRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/master", masterRoute);
 
 export default app;

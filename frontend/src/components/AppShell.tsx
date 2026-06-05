@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { Leaf, Sprout, Wheat, Home, Stethoscope, History, UserCog, SwitchCamera } from "lucide-react";
+import { NavBar } from "@/components/NavBar";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
@@ -8,6 +9,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   const toggleRole = () => changeRole(role === "user" ? "admin" : "user");
+  const navItems = [
+    { name: "Beranda", url: "/", icon: Home, isActive: (pathname: string) => pathname === "/" },
+    {
+      name: "Diagnosa",
+      url: "/diagnosa",
+      icon: Stethoscope,
+      isActive: (pathname: string) =>
+        pathname.startsWith("/diagnosa") ||
+        pathname.startsWith("/hasil") ||
+        pathname.startsWith("/proses") ||
+        pathname.startsWith("/validasi"),
+    },
+    { name: "Riwayat", url: "/riwayat", icon: History, isActive: (pathname: string) => pathname.startsWith("/riwayat") },
+    ...(role === "admin"
+      ? [{ name: "Admin", url: "/admin", icon: UserCog, isActive: (pathname: string) => pathname.startsWith("/admin") }]
+      : []),
+  ];
 
   useEffect(() => {
     if (path.startsWith("/admin") && role === "user") {
@@ -16,7 +34,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [path, role, navigate]);
 
   return (
-    <div className="relative min-h-screen bg-background pb-24 md:pb-0 overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-background pb-28 md:pb-0">
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes float-slow {
             0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.03; }
@@ -34,6 +52,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Wheat className="bg-element absolute -right-20 bottom-10 h-[300px] w-[300px] text-primary md:h-[500px] md:w-[500px]" style={{ animationDelay: '-4s' }} strokeWidth={1} />
         <Sprout className="bg-element absolute -bottom-10 -left-20 h-[200px] w-[200px] text-primary md:h-[350px] md:w-[350px]" style={{ animationDelay: '-7s' }} strokeWidth={1} />
       </div>
+      <NavBar items={navItems} activePath={path} />
+
       {/* Top bar */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-xl">
         <div className="flex h-16 w-full items-center justify-between px-4 md:h-20 md:px-12">
@@ -44,12 +64,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
           <div className="flex items-center gap-4">
-            <nav className="hidden items-center gap-1 md:flex mr-4">
-              <TopLink to="/" label="Beranda" active={path === "/"} />
-              <TopLink to="/diagnosa" label="Diagnosa" active={path.startsWith("/diagnosa")} />
-              <TopLink to="/riwayat" label="Riwayat" active={path.startsWith("/riwayat")} />
-              {role === "admin" && <TopLink to="/admin" label="Admin" active={path.startsWith("/admin")} />}
-            </nav>
             <button
               onClick={toggleRole}
               className="flex items-center gap-2 rounded-xl border-2 border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary-deep transition-colors hover:bg-primary/20 shadow-sm"
@@ -63,15 +77,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-6 md:px-8 md:py-10">{children}</main>
-
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-xl md:hidden pb-safe-bottom">
-        <div className={`mx-auto grid max-w-md px-2 py-2 mb-2 ${role === "admin" ? "grid-cols-4" : "grid-cols-3"}`}>
-          <BottomLink to="/" label="Beranda" icon={Home} active={path === "/"} />
-          <BottomLink to="/diagnosa" label="Diagnosa" icon={Stethoscope} active={path.startsWith("/diagnosa") || path.startsWith("/hasil") || path.startsWith("/proses") || path.startsWith("/validasi")} />
-          <BottomLink to="/riwayat" label="Riwayat" icon={History} active={path.startsWith("/riwayat")} />
-          {role === "admin" && <BottomLink to="/admin" label="Admin" icon={UserCog} active={path.startsWith("/admin")} />}
-        </div>
-      </nav>
     </div>
   );
 }
@@ -104,29 +109,3 @@ export function useRole() {
   return { role, changeRole };
 }
 
-function TopLink({ to, label, active }: { to: string; label: string; active: boolean }) {
-  return (
-    <Link
-      to={to}
-      className={`rounded-xl px-5 py-2 text-base font-semibold transition-colors ${
-        active ? "bg-secondary text-primary-deep" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-      }`}
-    >
-      {label}
-    </Link>
-  );
-}
-
-function BottomLink({ to, label, icon: Icon, active }: { to: string; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; active: boolean }) {
-  return (
-    <Link
-      to={to}
-      className={`flex min-h-[56px] flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-xs font-medium transition-colors ${
-        active ? "bg-secondary text-primary-deep" : "text-muted-foreground"
-      }`}
-    >
-      <Icon className="h-6 w-6" strokeWidth={active ? 2.5 : 2} />
-      {label}
-    </Link>
-  );
-}

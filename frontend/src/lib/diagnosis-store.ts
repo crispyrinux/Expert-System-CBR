@@ -1,5 +1,5 @@
 // Simple session-scoped store untuk membawa data antar layar (prototype)
-const KEY_SELECTED = "agripakar:selected";
+const KEY_CONSULTATION_ID = "agripakar:consultationId";
 const KEY_HISTORY = "agripakar:history";
 
 export interface HistoryItem {
@@ -8,13 +8,19 @@ export interface HistoryItem {
   score: number;
 }
 
-export function getSelected(): string[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(sessionStorage.getItem(KEY_SELECTED) || "[]"); } catch { return []; }
+export function getConsultationId(): string | null {
+  if (typeof window === "undefined") return null;
+  return sessionStorage.getItem(KEY_CONSULTATION_ID);
 }
-export function setSelected(codes: string[]) {
+
+export function setConsultationId(id: string) {
   if (typeof window === "undefined") return;
-  sessionStorage.setItem(KEY_SELECTED, JSON.stringify(codes));
+  sessionStorage.setItem(KEY_CONSULTATION_ID, id);
+}
+
+export function clearConsultationId() {
+  if (typeof window === "undefined") return;
+  sessionStorage.removeItem(KEY_CONSULTATION_ID);
 }
 
 export function getHistory(): HistoryItem[] {

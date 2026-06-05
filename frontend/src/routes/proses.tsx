@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { getSelected } from "@/lib/diagnosis-store";
+import { useEffect, useState } from "react";
+import { getConsultationId } from "@/lib/diagnosis-store";
+import { api } from "@/lib/api-client";
 import { Sprout, Search, Database, Calculator, Receipt, Leaf, Wheat } from "lucide-react";
 
 export const Route = createFileRoute("/proses")({
@@ -10,18 +11,40 @@ export const Route = createFileRoute("/proses")({
 
 function Proses() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const selected = getSelected();
-    if (selected.length === 0) {
+    const cid = getConsultationId();
+    if (!cid) {
       navigate({ to: "/diagnosa" });
       return;
     }
-    const t = setTimeout(() => {
-      navigate({ to: "/hasil" });
-    }, 4500); 
-    return () => clearTimeout(t);
+
+    // Minimum delay for UI (2.5s) combined with API call
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 2500));
+    const apiCall = api.getDiagnosis(cid);
+
+    Promise.all([apiCall, minDelay])
+      .then(([diagnosisData]) => {
+        // Diagnosis is ready in backend, we can navigate to hasil
+        navigate({ to: "/hasil" });
+      })
+      .catch((err) => {
+        console.error("Diagnosis error:", err);
+        setError("Gagal memproses diagnosa. Silakan coba lagi.");
+      });
   }, [navigate]);
+
+  if (error) {
+     return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-6 max-w-md">
+                <p className="text-destructive font-bold mb-4">{error}</p>
+                <button onClick={() => navigate({ to: "/diagnosa" })} className="bg-primary text-primary-foreground px-6 py-2 rounded-xl font-medium">Kembali</button>
+            </div>
+        </div>
+     )
+  }
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background font-sans text-foreground antialiased">
@@ -107,7 +130,7 @@ function Proses() {
             </li>
             <li className="step-2 flex items-center gap-4 opacity-20">
               <Database className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-              <span className="font-medium text-foreground/80">Menganalisis 13 Basis Pengetahuan...</span>
+              <span className="font-medium text-foreground/80">Menganalisis Basis Pengetahuan...</span>
             </li>
             <li className="step-3 flex items-center gap-4 opacity-20">
               <Calculator className="h-5 w-5 md:h-6 md:w-6 text-primary" />

@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { ChevronDown, Calculator, Search, X, Check, Leaf, Sprout, Wheat, Flower2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { AlertTriangle, ChevronDown, Calculator, Search, X, Check, Leaf, Sprout, Wheat, Flower2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { SYMPTOMS, CATEGORIES, type SymptomCategory } from "@/lib/agripakar-data";
-import { setSelected } from "@/lib/diagnosis-store";
+import { Announcement, AnnouncementTag, AnnouncementTitle } from "@/components/ui/announcement";
+import { setConsultationId } from "@/lib/diagnosis-store";
+import { api, type Symptom } from "@/lib/api-client";
+import { CATEGORIES, type SymptomCategory } from "@/lib/agripakar-data";
 
 const CAT_ICONS: Record<SymptomCategory, { icon: any; bg: string; text: string }> = {
   "Daun": { icon: Leaf, bg: "bg-primary/10", text: "text-primary-deep" },
@@ -17,38 +19,95 @@ export const Route = createFileRoute("/diagnosa")({
   component: Diagnosa,
 });
 
+// Helper untuk mengkategorikan gejala dari database (karena db belum punya kategori, kita tebak dari deskripsi)
+function categorizeSymptom(desc: string): SymptomCategory {
+  const d = desc.toLowerCase();
+  if (d.includes("malai") || d.includes("bulir") || d.includes("gabah") || d.includes("biji")) return "Malai/Bulir";
+  if (d.includes("akar")) return "Akar";
+  if (d.includes("batang") || d.includes("pelepah") || d.includes("buku")) return "Batang";
+  return "Daun"; // default
+}
+
 function Diagnosa() {
   const navigate = useNavigate();
+  const [symptoms, setSymptoms] = useState<Symptom[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+  
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<Record<SymptomCategory, boolean>>({
     "Daun": true, "Batang": false, "Akar": false, "Malai/Bulir": false,
   });
 
+  useEffect(() => {
+    api.getSymptoms()
+      .then(data => {
+        setSymptoms(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to load symptoms", err);
+        setLoading(false);
+      });
+  }, []);
+
   const filtered = useMemo(() => {
-    if (!query.trim()) return SYMPTOMS;
+    if (!query.trim()) return symptoms;
     const q = query.toLowerCase();
-    return SYMPTOMS.filter((s) => s.text.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));
-  }, [query]);
+    return symptoms.filter((s) => s.description.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));
+  }, [query, symptoms]);
 
   const grouped = useMemo(() => {
-    const m: Record<SymptomCategory, typeof SYMPTOMS> = { "Daun": [], "Batang": [], "Akar": [], "Malai/Bulir": [] };
-    filtered.forEach((s) => m[s.category].push(s));
+    const m: Record<SymptomCategory, Symptom[]> = { "Daun": [], "Batang": [], "Akar": [], "Malai/Bulir": [] };
+    filtered.forEach((s) => {
+      const cat = categorizeSymptom(s.description);
+      m[cat].push(s);
+    });
     return m;
   }, [filtered]);
 
-  function toggle(code: string) {
+  function toggle(id: string) {
     setPicked((prev) => {
       const next = new Set(prev);
-      if (next.has(code)) next.delete(code); else next.add(code);
+      if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
   }
 
-  function handleSubmit() {
-    if (picked.size === 0) return;
-    setSelected(Array.from(picked));
-    navigate({ to: "/proses" });
+  async function handleSubmit() {
+    if (picked.size === 0 || submitting) return;
+    setSubmitting(true);
+    setNotice(null);
+    try {
+      // 1. Buat konsultasi
+      const consult = await api.createConsultation();
+      const cid = consult.consultationId;
+      
+      // 2. Tambahkan gejala (menggunakan ID, bukan kode)
+      await api.addSymptoms(cid, Array.from(picked));
+      
+      // 3. Simpan ID ke store
+      setConsultationId(cid);
+      
+      // 4. Lanjut ke proses
+      navigate({ to: "/proses" });
+    } catch (error) {
+      console.error("Failed to start diagnosis:", error);
+      setNotice("Terjadi kesalahan saat mengirim gejala. Periksa koneksi backend, lalu coba lagi.");
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <AppShell>
+         <div className="flex h-[50vh] items-center justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+         </div>
+      </AppShell>
+    );
   }
 
   return (
@@ -69,6 +128,19 @@ function Diagnosa() {
             Centang seluruh gejala yang terlihat pada tanaman padi Anda. Semakin lengkap gejala yang dipilih, semakin akurat hasil diagnosanya.
           </p>
         </header>
+
+        {notice && (
+          <div className="mx-auto w-full max-w-5xl">
+            <Announcement themed className="w-full justify-start border-destructive/30 bg-destructive/10 px-4 py-2 text-left text-destructive">
+              <AnnouncementTag className="bg-destructive/10 text-destructive">Gagal</AnnouncementTag>
+              <AnnouncementTitle>
+                <AlertTriangle className="h-4 w-4 shrink-0" />
+                <span className="shrink-0 font-bold">Diagnosa belum diproses</span>
+                <span className="hidden truncate font-medium opacity-80 sm:inline">{notice}</span>
+              </AnnouncementTitle>
+            </Announcement>
+          </div>
+        )}
 
         {/* Search */}
         <div className="relative">
@@ -92,7 +164,7 @@ function Diagnosa() {
             const items = grouped[cat];
             if (items.length === 0) return null;
             const isOpen = open[cat] || query.trim().length > 0;
-            const countPicked = items.filter((i) => picked.has(i.code)).length;
+            const countPicked = items.filter((i) => picked.has(i.id)).length;
             return (
               <section key={cat} className="overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
                 <button
@@ -113,12 +185,12 @@ function Diagnosa() {
                 {isOpen && (
                   <ul className="divide-y divide-border border-t border-border">
                     {items.map((s) => {
-                      const checked = picked.has(s.code);
+                      const checked = picked.has(s.id);
                       const SIcon = CAT_ICONS[cat].icon;
                       return (
                         <li key={s.code}>
                           <button
-                            onClick={() => toggle(s.code)}
+                            onClick={() => toggle(s.id)}
                             className={`flex w-full items-center gap-4 px-5 py-4 text-left transition-colors min-h-[64px] ${
                               checked ? "bg-primary/5" : "hover:bg-secondary/60"
                             }`}
@@ -128,7 +200,7 @@ function Diagnosa() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-bold text-muted-foreground/70 mb-0.5">{s.code}</p>
-                              <p className="text-base font-medium leading-relaxed text-foreground">{s.text}</p>
+                              <p className="text-base font-medium leading-relaxed text-foreground">{s.description}</p>
                             </div>
                             <span
                               className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-all ${
@@ -161,12 +233,16 @@ function Diagnosa() {
         <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-card/95 p-3 shadow-card backdrop-blur-xl">
           <button
             onClick={handleSubmit}
-            disabled={picked.size === 0}
+            disabled={picked.size === 0 || submitting}
             className="flex h-16 w-full items-center justify-between gap-3 rounded-xl bg-primary px-6 text-lg font-bold text-primary-foreground shadow-cta transition-transform active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
           >
             <span className="flex items-center gap-3">
-              <Calculator className="h-6 w-6" strokeWidth={2.5} />
-              Hitung Diagnosa
+              {submitting ? (
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+              ) : (
+                <Calculator className="h-6 w-6" strokeWidth={2.5} />
+              )}
+              {submitting ? "Memproses..." : "Hitung Diagnosa"}
             </span>
             <span className="rounded-full bg-primary-foreground/20 px-3 py-1 text-sm font-bold">
               {picked.size} gejala

@@ -3,6 +3,7 @@ import { Stethoscope, ArrowRight, Sprout, ShieldAlert, TrendingUp, Leaf, Droplet
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { getHistory, type HistoryItem } from "@/lib/diagnosis-store";
+import { api } from "@/lib/api-client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,7 +17,22 @@ export const Route = createFileRoute("/")({
 
 function Beranda() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">("checking");
   useEffect(() => setHistory(getHistory()), []);
+  useEffect(() => {
+    let mounted = true;
+    api
+      .health()
+      .then(() => {
+        if (mounted) setApiStatus("online");
+      })
+      .catch(() => {
+        if (mounted) setApiStatus("offline");
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <AppShell>
@@ -26,6 +42,18 @@ function Beranda() {
           <div className="flex flex-col items-start text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm font-medium text-primary-deep">
               <Sprout className="h-4 w-4" /> Sistem Pakar Padi
+            </div>
+            <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-muted-foreground">
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  apiStatus === "online"
+                    ? "bg-primary"
+                    : apiStatus === "offline"
+                      ? "bg-destructive"
+                      : "bg-warning"
+                }`}
+              />
+              Backend {apiStatus === "online" ? "terhubung" : apiStatus === "offline" ? "tidak terhubung" : "dicek"}
             </div>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-foreground md:mt-6 md:text-5xl lg:text-6xl lg:leading-[1.1]">
               Panen <span className="text-primary">Melimpah,</span><br />
