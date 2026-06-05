@@ -17,8 +17,19 @@ export const Route = createFileRoute("/")({
 
 function Beranda() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  useEffect(() => {
+    const rawHistory = getHistory();
+    
+    const uniqueHistory = Array.from(
+      new Map(rawHistory.map(item => [item.id || item.diseaseName + item.score, item])).values()
+    );
+    
+    setHistory(uniqueHistory.slice(0, 3));
+  }, []);
+
   const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">("checking");
-  useEffect(() => setHistory(getHistory()), []);
+  
   useEffect(() => {
     let mounted = true;
     api

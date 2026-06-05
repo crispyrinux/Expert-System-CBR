@@ -1,4 +1,4 @@
-import { PrismaClient, CaseSymptom, Prisma } from "@prisma/client";
+import { PrismaClient, CaseSymptom, Prisma, Symptom } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -6,6 +6,14 @@ export type DiagnosisStatus =
   | "STRONG_DIAGNOSIS"
   | "POSSIBLE_DIAGNOSIS"
   | "NO_DIAGNOSIS";
+
+export interface SymptomMatchDetail {
+  symptomId: string;
+  symptomCode: string;
+  symptomDescription: string;
+  isMatched: boolean;
+  weight: number;
+}
 
 export interface CaseSimilarityResult {
   caseId: string;
@@ -17,6 +25,7 @@ export interface CaseSimilarityResult {
   diseaseCode: string;
   diseaseName: string;
   similarity: number;
+  symptomDetails: SymptomMatchDetail[]; // Field baru untuk tabel
 }
 
 export interface BestDiagnosisResult {
@@ -33,6 +42,7 @@ export interface BestDiagnosisResult {
     solutions: string[];
   } | null;
   similarity: number;
+  symptomDetails: SymptomMatchDetail[]; // Field baru untuk tabel
   status: DiagnosisStatus;
   ambiguous: boolean;
   topMatches: CaseSimilarityResult[];
@@ -50,33 +60,44 @@ function normalizeSolutions(value: Prisma.JsonValue | null): string[] {
 export const cbrService = {
   /**
    * Menghitung similarity antara gejala input dengan satu case tertentu
-   * Rumus: (Total bobot gejala yang cocok / Total bobot semua gejala pada case) * 100
+   * Serta mengembalikan rincian kecocokannya untuk Explanation Facility
    */
   calculateCaseSimilarity(
     selectedSymptomIds: string[],
-    caseSymptoms: CaseSymptom[]
-  ): number {
-    if (caseSymptoms.length === 0) return 0;
+    caseSymptoms: (CaseSymptom & { symptom: Symptom })[]
+  ): { similarity: number; details: SymptomMatchDetail[] } {
+    if (caseSymptoms.length === 0) return { similarity: 0, details: [] };
 
     let totalWeight = 0;
     let matchedWeight = 0;
+    const details: SymptomMatchDetail[] = [];
 
     for (const cs of caseSymptoms) {
       totalWeight += cs.weight;
-      if (selectedSymptomIds.includes(cs.symptomId)) {
+      const isMatched = selectedSymptomIds.includes(cs.symptomId);
+      
+      if (isMatched) {
         matchedWeight += cs.weight;
       }
+
+      details.push({
+        symptomId: cs.symptomId,
+        symptomCode: cs.symptom.code,
+        symptomDescription: cs.symptom.description,
+        isMatched,
+        weight: cs.weight,
+      });
     }
 
-    if (totalWeight === 0) return 0;
+    if (totalWeight === 0) return { similarity: 0, details: [] };
 
     const similarity = (matchedWeight / totalWeight) * 100;
-    return Number(similarity.toFixed(2));
+    return { 
+      similarity: Number(similarity.toFixed(2)), 
+      details 
+    };
   },
 
-  /**
-   * Menghitung similarity untuk semua cases yang ada di database
-   */
   async calculateAllCases(
     selectedSymptomIds: string[]
   ): Promise<CaseSimilarityResult[]> {
@@ -84,7 +105,11 @@ export const cbrService = {
       orderBy: { code: "asc" },
       include: {
         disease: true,
-        caseSymptoms: true,
+        caseSymptoms: {
+          include: {
+            symptom: true, // Tarik data master gejala agar bisa ditampilkan teksnya
+          }
+        },
       },
     });
 
@@ -97,10 +122,12 @@ export const cbrService = {
     }
 
     const results: CaseSimilarityResult[] = cases.map((caseBase) => {
-      const similarity = this.calculateCaseSimilarity(
+      // Ambil kembalian berupa skor dan rinciannya
+      const { similarity, details } = this.calculateCaseSimilarity(
         selectedSymptomIds,
         caseBase.caseSymptoms
       );
+      
       const caseSolutions = normalizeSolutions(caseBase.solutions);
 
       return {
@@ -115,33 +142,24 @@ export const cbrService = {
         diseaseCode: caseBase.disease.code,
         diseaseName: caseBase.disease.name,
         similarity,
+        symptomDetails: details, // Simpan detail rincian ke array hasil
       };
     });
 
-    // Mengurutkan secara menurun (descending) berdasarkan similarity tertinggi
     return results.sort((a, b) => b.similarity - a.similarity);
   },
 
-  /**
-   * Mengklasifikasikan diagnosis berdasarkan similarity tertinggi
-   */
   classifyDiagnosis(similarity: number): DiagnosisStatus {
     if (similarity >= 70) return "STRONG_DIAGNOSIS";
     if (similarity >= 40) return "POSSIBLE_DIAGNOSIS";
     return "NO_DIAGNOSIS";
   },
 
-  /**
-   * Mendeteksi ambiguitas apabila selisih ranking 1 dan 2 < 10%
-   */
   detectAmbiguity(top1Sim: number, top2Sim: number, status: DiagnosisStatus): boolean {
     if (status === "NO_DIAGNOSIS") return false;
     return top1Sim - top2Sim < 10;
   },
 
-  /**
-   * Menggabungkan semua proses CBR untuk menemukan diagnosis terbaik
-   */
   async findBestDiagnosis(
     selectedSymptomIds: string[]
   ): Promise<BestDiagnosisResult> {
@@ -152,6 +170,7 @@ export const cbrService = {
         disease: null,
         case: null,
         similarity: 0,
+        symptomDetails: [],
         status: "NO_DIAGNOSIS",
         ambiguous: false,
         topMatches: [],
@@ -184,9 +203,10 @@ export const cbrService = {
         solutions: bestMatch.caseSolutions,
       },
       similarity: bestMatch.similarity,
+      symptomDetails: bestMatch.symptomDetails, // Oper rincian terbaik ke hasil akhir
       status,
       ambiguous,
-      topMatches: sortedCases.slice(0, 5), // Menyimpan 5 hasil teratas untuk keperluan history/referensi API
+      topMatches: sortedCases.slice(0, 5),
     };
   },
 };

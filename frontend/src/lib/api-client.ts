@@ -63,6 +63,7 @@ export interface DiagnosisResult {
     similarity: number;
     status: string;
     ambiguous: boolean;
+    symptomDetails: SymptomMatchDetail[]; // <--- Tambahkan baris ini
   };
   topMatches: Array<{
     caseCode: string;
@@ -170,3 +171,11 @@ export const api = {
     });
   },
 };
+
+export interface SymptomMatchDetail {
+  symptomId: string;
+  symptomCode: string;
+  symptomDescription: string;
+  isMatched: boolean;
+  weight: number;
+}

@@ -1,8 +1,8 @@
-// Simple session-scoped store untuk membawa data antar layar (prototype)
 const KEY_CONSULTATION_ID = "agripakar:consultationId";
 const KEY_HISTORY = "agripakar:history";
 
 export interface HistoryItem {
+  id: string;
   date: string;
   diseaseName: string;
   score: number;
@@ -27,8 +27,15 @@ export function getHistory(): HistoryItem[] {
   if (typeof window === "undefined") return [];
   try { return JSON.parse(localStorage.getItem(KEY_HISTORY) || "[]"); } catch { return []; }
 }
+
 export function pushHistory(item: HistoryItem) {
-  if (typeof window === "undefined") return;
-  const list = [item, ...getHistory()].slice(0, 5);
-  localStorage.setItem(KEY_HISTORY, JSON.stringify(list));
+if (typeof window === "undefined") return;
+  const history = getHistory();
+  
+  const isDuplicate = history.some((h) => h.id === item.id);
+  
+  if (!isDuplicate) {
+    history.unshift(item);
+    localStorage.setItem(KEY_HISTORY, JSON.stringify(history.slice(0, 10)));
+  }
 }

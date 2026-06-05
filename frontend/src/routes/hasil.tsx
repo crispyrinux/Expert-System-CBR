@@ -40,9 +40,10 @@ function Hasil() {
         setLoading(false);
         if (data.diagnosis.disease) {
            pushHistory({
+            id: cid,
              date: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
              diseaseName: data.diagnosis.disease.name,
-             score: data.diagnosis.similarity / 100, // keep 0-1 range for history if needed, or 0-100
+             score: data.diagnosis.similarity / 100, 
            });
         }
       })
@@ -113,7 +114,7 @@ function Hasil() {
   }
 
   const diag = result.diagnosis;
-  const pct = Math.round(diag.similarity); // already 0-100 from backend
+  const pct = Math.round(diag.similarity);
   const disease = diag.disease;
   const bestCase = diag.case;
   const solutions = bestCase?.solutions ?? [];
@@ -170,9 +171,9 @@ function Hasil() {
                 {diag.status === "STRONG_DIAGNOSIS" ? <CheckCircle2 className="h-3.5 w-3.5" /> : <AlertTriangle className="h-3.5 w-3.5" />}
                 {certaintyLabel}
               </span>
-              <h2 className="mt-3 text-3xl font-bold text-foreground md:text-4xl">{disease.name}</h2>
+              <h2 className="mt-3 text-3xl font-bold text-foreground md:text-4xl">{disease?.name}</h2>
               <p className="mt-1 text-sm font-bold text-muted-foreground">
-                {disease.code} - Kecocokan Terbaik: Kasus {bestCase?.code || result.topMatches[0]?.caseCode || "N/A"}
+                {disease?.code} - Kecocokan Terbaik: Kasus {bestCase?.code || result.topMatches[0]?.caseCode || "N/A"}
               </p>
               <p className="mt-3 text-base text-muted-foreground">
                 Sistem menemukan kemiripan sebesar <span className="font-bold text-foreground">{pct}%</span> antara gejala tanaman Anda dengan basis pengetahuan historis kami.
@@ -267,7 +268,7 @@ function Hasil() {
             <div className="border-t border-border p-5 md:p-6 animate-fade-in bg-secondary/10">
               
               <div className="grid md:grid-cols-2 gap-6 mb-6">
-                {/* 2. Confidence Statement */}
+                {/* Confidence Statement */}
                 <div className="rounded-2xl bg-card border border-border p-5 shadow-sm">
                   <h4 className="mb-2 font-bold text-lg text-foreground">Confidence Statement</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -279,7 +280,7 @@ function Hasil() {
                   </p>
                 </div>
 
-                {/* 3. Novelty / Ambiguity */}
+                {/* Novelty / Ambiguity */}
                 {diag.ambiguous ? (
                   <div className="rounded-2xl bg-warning/15 border border-warning/30 p-5 shadow-sm">
                     <h4 className="mb-2 font-bold text-lg text-warning-foreground">Ambiguitas Terdeteksi (Revise Phase)</h4>
@@ -297,7 +298,50 @@ function Hasil() {
                 )}
               </div>
 
-              {/* 5. Penjelasan Kandidat Lain */}
+              {/* ===== TABEL RINCIAN KECOCOKAN GEJALA DITAMBAHKAN DI SINI ===== */}
+              {diag.symptomDetails && diag.symptomDetails.length > 0 && (
+                <div className="mb-6 rounded-2xl bg-card border border-border p-5 shadow-sm">
+                  <h4 className="mb-2 font-bold text-lg text-foreground">Rincian Kecocokan Gejala</h4>
+                  <p className="mb-4 text-sm text-muted-foreground">Detail kontribusi bobot tiap gejala terhadap perhitungan skor kemiripan (Kasus {bestCase?.code}).</p>
+                  
+                  <div className="overflow-hidden rounded-xl border border-border">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm min-w-[500px]">
+                        <thead className="bg-secondary text-foreground">
+                          <tr>
+                            <th className="px-4 py-3 text-left font-bold">Kode</th>
+                            <th className="px-4 py-3 text-left font-bold">Deskripsi Gejala</th>
+                            <th className="px-4 py-3 text-center font-bold">Bobot Gejala</th>
+                            <th className="px-4 py-3 text-center font-bold">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {diag.symptomDetails.map((detail) => (
+                            <tr key={detail.symptomId} className={detail.isMatched ? "bg-primary/5" : ""}>
+                              <td className="px-4 py-3 text-foreground font-medium">{detail.symptomCode}</td>
+                              <td className="px-4 py-3 text-foreground leading-relaxed">{detail.symptomDescription}</td>
+                              <td className="px-4 py-3 text-center text-muted-foreground">{detail.weight}</td>
+                              <td className="px-4 py-3 text-center font-medium">
+                                <span className={detail.isMatched ? "text-primary-deep font-bold" : "text-muted-foreground"}>
+                                  {detail.isMatched ? "Cocok" : "Tidak ada"}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                        <tfoot className="bg-secondary/60 border-t-2 border-border font-bold">
+                          <tr>
+                            <td colSpan={3} className="px-4 py-3 text-right">Total Similarity Final</td>
+                            <td className="px-4 py-3 text-center text-primary-deep text-base">{pct}%</td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Penjelasan Kandidat Lain */}
               <div className="rounded-2xl bg-card border border-border p-5 shadow-sm">
                 <h4 className="mb-3 font-bold text-lg text-foreground">Kandidat Kasus Lainnya (Top 5 Matches)</h4>
                 <ul className="space-y-3">
@@ -350,7 +394,6 @@ function RadialScore({ value, status }: { value: number, status: string }) {
   const color = status === "STRONG_DIAGNOSIS" ? "var(--primary)" : status === "POSSIBLE_DIAGNOSIS" ? "var(--warning)" : "var(--destructive)";
   return (
     <div className="relative flex items-center justify-center animate-scale-in" style={{ width: size, height: size }}>
-      {/* Success Aura Glow */}
       {status === "STRONG_DIAGNOSIS" && (
         <div className="absolute inset-0 scale-110 rounded-full bg-primary/20 blur-2xl animate-pulse" />
       )}

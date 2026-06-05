@@ -102,7 +102,6 @@ export const consultationController = {
     }
   },
 
-  // GET /consultations/:id/diagnose
   async diagnose(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
@@ -158,6 +157,7 @@ export const consultationController = {
           disease: result.disease,
           case: result.case,
           similarity: result.similarity,
+          symptomDetails: result.symptomDetails, // <--- Ini yang diteruskan ke UI (Frontend)
           status: result.status,
           ambiguous: result.ambiguous,
         },
