@@ -45,7 +45,7 @@ export const consultationController = {
   },
 
   // POST /consultations/:id/symptoms
-  async addSymptoms(req: Request, res: Response): Promise<void> {
+  async addSymptoms(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -103,7 +103,7 @@ export const consultationController = {
   },
 
   // GET /consultations/:id/diagnose
-  async diagnose(req: Request, res: Response): Promise<void> {
+  async diagnose(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -156,6 +156,7 @@ export const consultationController = {
         status: "COMPLETED",
         diagnosis: {
           disease: result.disease,
+          case: result.case,
           similarity: result.similarity,
           status: result.status,
           ambiguous: result.ambiguous,
@@ -169,7 +170,7 @@ export const consultationController = {
   },
 
   // POST /consultations/:id/confirm
-  async confirmConsultation(req: Request, res: Response): Promise<void> {
+  async confirmConsultation(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 

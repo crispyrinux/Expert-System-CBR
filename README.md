@@ -367,6 +367,15 @@ Contoh response:
       "code": "HP01",
       "name": "Nama penyakit"
     },
+    "case": {
+      "id": "casebase-id",
+      "code": "K01",
+      "title": "Nama case",
+      "description": null,
+      "solutions": [
+        "Contoh rekomendasi pengendalian"
+      ]
+    },
     "similarity": 85,
     "status": "STRONG_DIAGNOSIS",
     "ambiguous": false
@@ -454,6 +463,7 @@ Catatan:
 
 - Hanya kandidat berstatus `UNDER_REVIEW` yang bisa di-approve.
 - Approval membuat data baru di `CaseBase`.
+- Case baru mewarisi `solutions` dari case referensi penyakit yang sama jika tersedia.
 - Status kandidat berubah menjadi `APPROVED`.
 
 #### POST `/api/admin/candidates/:id/reject`

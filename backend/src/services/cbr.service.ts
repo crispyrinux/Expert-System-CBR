@@ -1,4 +1,4 @@
-import { PrismaClient, CaseSymptom } from "@prisma/client";
+import { PrismaClient, CaseSymptom, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -10,6 +10,9 @@ export type DiagnosisStatus =
 export interface CaseSimilarityResult {
   caseId: string;
   caseCode: string;
+  caseTitle: string;
+  caseDescription: string | null;
+  caseSolutions: string[];
   diseaseId: string;
   diseaseCode: string;
   diseaseName: string;
@@ -25,11 +28,23 @@ export interface BestDiagnosisResult {
   case: {
     id: string;
     code: string;
+    title: string;
+    description: string | null;
+    solutions: string[];
   } | null;
   similarity: number;
   status: DiagnosisStatus;
   ambiguous: boolean;
   topMatches: CaseSimilarityResult[];
+}
+
+function normalizeSolutions(value: Prisma.JsonValue | null): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
 }
 
 export const cbrService = {
@@ -66,20 +81,36 @@ export const cbrService = {
     selectedSymptomIds: string[]
   ): Promise<CaseSimilarityResult[]> {
     const cases = await prisma.caseBase.findMany({
+      orderBy: { code: "asc" },
       include: {
         disease: true,
         caseSymptoms: true,
       },
     });
 
+    const fallbackSolutionsByDiseaseId = new Map<string, string[]>();
+    for (const caseBase of cases) {
+      const caseSolutions = normalizeSolutions(caseBase.solutions);
+      if (caseSolutions.length > 0 && !fallbackSolutionsByDiseaseId.has(caseBase.diseaseId)) {
+        fallbackSolutionsByDiseaseId.set(caseBase.diseaseId, caseSolutions);
+      }
+    }
+
     const results: CaseSimilarityResult[] = cases.map((caseBase) => {
       const similarity = this.calculateCaseSimilarity(
         selectedSymptomIds,
         caseBase.caseSymptoms
       );
+      const caseSolutions = normalizeSolutions(caseBase.solutions);
+
       return {
         caseId: caseBase.id,
         caseCode: caseBase.code,
+        caseTitle: caseBase.title,
+        caseDescription: caseBase.description,
+        caseSolutions: caseSolutions.length > 0
+          ? caseSolutions
+          : fallbackSolutionsByDiseaseId.get(caseBase.diseaseId) ?? [],
         diseaseId: caseBase.disease.id,
         diseaseCode: caseBase.disease.code,
         diseaseName: caseBase.disease.name,
@@ -148,6 +179,9 @@ export const cbrService = {
       case: {
         id: bestMatch.caseId,
         code: bestMatch.caseCode,
+        title: bestMatch.caseTitle,
+        description: bestMatch.caseDescription,
+        solutions: bestMatch.caseSolutions,
       },
       similarity: bestMatch.similarity,
       status,

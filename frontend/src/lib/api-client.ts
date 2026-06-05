@@ -53,6 +53,13 @@ export interface DiagnosisResult {
       code: string;
       name: string;
     } | null;
+    case: {
+      id: string;
+      code: string;
+      title: string;
+      description: string | null;
+      solutions: string[];
+    } | null;
     similarity: number;
     status: string;
     ambiguous: boolean;

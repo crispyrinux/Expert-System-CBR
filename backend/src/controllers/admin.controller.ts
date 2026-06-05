@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -17,6 +17,36 @@ async function generateCaseCode() {
   }
   
   return `K${nextId.toString().padStart(2, "0")}`;
+}
+
+function getUsableSolutions(value: Prisma.JsonValue | null): Prisma.JsonArray | undefined {
+  if (!Array.isArray(value)) return undefined;
+
+  const hasSolutionText = value.some((item) => typeof item === "string" && item.trim().length > 0);
+  return hasSolutionText ? value : undefined;
+}
+
+async function findReusableSolutionsForDisease(diseaseId: string): Promise<Prisma.JsonArray | undefined> {
+  const referenceCases = await prisma.caseBase.findMany({
+    where: { diseaseId },
+    orderBy: { code: "asc" },
+    select: {
+      approvedFromCandidateCaseId: true,
+      solutions: true,
+    },
+  });
+
+  const canonicalCase = referenceCases.find((caseBase) => caseBase.approvedFromCandidateCaseId === null);
+  const canonicalSolutions = getUsableSolutions(canonicalCase?.solutions ?? null);
+
+  if (canonicalSolutions) return canonicalSolutions;
+
+  for (const caseBase of referenceCases) {
+    const reusableSolutions = getUsableSolutions(caseBase.solutions);
+    if (reusableSolutions) return reusableSolutions;
+  }
+
+  return undefined;
 }
 
 export const adminController = {
@@ -52,7 +82,7 @@ export const adminController = {
   },
 
   // GET /admin/candidates/:id
-  async getCandidateDetail(req: Request, res: Response): Promise<void> {
+  async getCandidateDetail(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -84,7 +114,7 @@ export const adminController = {
   },
 
   // POST /admin/candidates/:id/approve
-  async approveCandidate(req: Request, res: Response): Promise<void> {
+  async approveCandidate(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -109,6 +139,7 @@ export const adminController = {
       }
 
       const caseCode = await generateCaseCode();
+      const inheritedSolutions = await findReusableSolutionsForDisease(candidate.diseaseId);
 
       const newCase = await prisma.$transaction(async (tx) => {
         // 1. Create CaseBase
@@ -118,6 +149,9 @@ export const adminController = {
             diseaseId: candidate.diseaseId,
             title: candidate.title,
             description: candidate.description,
+            ...(inheritedSolutions
+              ? { solutions: inheritedSolutions as Prisma.InputJsonValue }
+              : {}),
             approvedFromCandidateCaseId: candidate.id,
             caseSymptoms: {
               create: candidate.candidateCaseSymptoms.map((cs) => ({
@@ -152,7 +186,7 @@ export const adminController = {
   },
 
   // POST /admin/candidates/:id/reject
-  async rejectCandidate(req: Request, res: Response): Promise<void> {
+  async rejectCandidate(req: Request<{ id: string }>, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 

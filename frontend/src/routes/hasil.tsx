@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, AlertTriangle, ChevronDown, Sprout, Zap, RotateCcw, Brain, Save } from "lucide-react";
+import { CheckCircle2, AlertTriangle, ChevronDown, Zap, RotateCcw, Brain, Save } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { Announcement, AnnouncementTag, AnnouncementTitle } from "@/components/ui/announcement";
 import { getConsultationId, pushHistory, clearConsultationId } from "@/lib/diagnosis-store";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/hasil")({
 function Hasil() {
   const navigate = useNavigate();
   const [showLogic, setShowLogic] = useState(false);
-  const [showSolusi, setShowSolusi] = useState(false);
+  const [showSolusi, setShowSolusi] = useState(true);
   
   const [result, setResult] = useState<DiagnosisResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -115,6 +115,8 @@ function Hasil() {
   const diag = result.diagnosis;
   const pct = Math.round(diag.similarity); // already 0-100 from backend
   const disease = diag.disease;
+  const bestCase = diag.case;
+  const solutions = bestCase?.solutions ?? [];
   
   const certaintyLabel = diag.status === "STRONG_DIAGNOSIS" ? "Kepastian Tinggi" : diag.status === "POSSIBLE_DIAGNOSIS" ? "Kepastian Sedang" : "Kepastian Rendah";
   const certaintyTone = diag.status === "STRONG_DIAGNOSIS" ? "bg-primary text-primary-foreground" : diag.status === "POSSIBLE_DIAGNOSIS" ? "bg-warning text-warning-foreground" : "bg-destructive text-destructive-foreground";
@@ -123,7 +125,7 @@ function Hasil() {
     <AppShell>
       <div className="space-y-6 pb-8 animate-fade-in">
         <header>
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary-deep">Langkah 3 dari 3 · Reuse & Revise</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary-deep">Langkah 3 dari 3 - Reuse & Revise</p>
           <h1 className="mt-1 text-3xl font-bold text-foreground md:text-4xl">Hasil Diagnosa</h1>
         </header>
 
@@ -170,13 +172,61 @@ function Hasil() {
               </span>
               <h2 className="mt-3 text-3xl font-bold text-foreground md:text-4xl">{disease.name}</h2>
               <p className="mt-1 text-sm font-bold text-muted-foreground">
-                {disease.code} · Kecocokan Terbaik: Kasus {result.topMatches[0]?.caseCode || "N/A"}
+                {disease.code} - Kecocokan Terbaik: Kasus {bestCase?.code || result.topMatches[0]?.caseCode || "N/A"}
               </p>
               <p className="mt-3 text-base text-muted-foreground">
                 Sistem menemukan kemiripan sebesar <span className="font-bold text-foreground">{pct}%</span> antara gejala tanaman Anda dengan basis pengetahuan historis kami.
               </p>
             </div>
           </div>
+        </section>
+
+        {/* Solutions */}
+        <section className="overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
+          <button
+            onClick={() => setShowSolusi((v) => !v)}
+            className="flex w-full items-center justify-between gap-3 px-5 py-5 text-left transition-colors hover:bg-secondary/40"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+                <Zap className="h-6 w-6" strokeWidth={2.5} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-foreground">Tindakan Pengendalian</h3>
+                <p className="text-sm text-muted-foreground">
+                  Solusi dari {bestCase?.title || `kasus ${bestCase?.code || "terpilih"}`}
+                </p>
+              </div>
+            </div>
+            <ChevronDown className={`h-6 w-6 text-muted-foreground transition-transform ${showSolusi ? "rotate-180" : ""}`} />
+          </button>
+
+          {showSolusi && (
+            <div className="border-t border-border bg-secondary/10 p-5 animate-fade-in md:p-6">
+              {solutions.length > 0 ? (
+                <ol className="space-y-3">
+                  {solutions.map((solution, index) => (
+                    <li key={`${bestCase?.code || "case"}-${index}`} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary-deep ring-1 ring-primary/20">
+                        {index + 1}
+                      </span>
+                      <p className="text-base font-medium leading-relaxed text-foreground">{solution}</p>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <div className="flex items-start gap-3 rounded-2xl border border-warning/30 bg-warning/10 p-5 text-warning-foreground">
+                  <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+                  <div>
+                    <h4 className="font-bold">Solusi belum tersedia</h4>
+                    <p className="mt-1 text-sm font-medium opacity-90">
+                      Case terpilih belum memiliki data solusi. Perlu validasi pakar sebelum rekomendasi pengendalian ditampilkan.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Retain Action */}
@@ -222,9 +272,9 @@ function Hasil() {
                   <h4 className="mb-2 font-bold text-lg text-foreground">Confidence Statement</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {diag.status === "STRONG_DIAGNOSIS" 
-                      ? <><strong className="text-primary-deep">Skor kemiripan {pct}% ≥ 70% (Strong Diagnosis).</strong> Diagnosis dapat diandalkan berdasarkan histori.</>
+                      ? <><strong className="text-primary-deep">Skor kemiripan {pct}% &gt;= 70% (Strong Diagnosis).</strong> Diagnosis dapat diandalkan berdasarkan histori.</>
                       : diag.status === "POSSIBLE_DIAGNOSIS"
-                      ? <><strong className="text-warning">Skor kemiripan {pct}% ≥ 40% (Possible Diagnosis).</strong> Kepastian sedang, perlu peninjauan visual tambahan.</>
+                      ? <><strong className="text-warning">Skor kemiripan {pct}% &gt;= 40% (Possible Diagnosis).</strong> Kepastian sedang, perlu peninjauan visual tambahan.</>
                       : <><strong className="text-destructive">Skor kemiripan {pct}% &lt; 40% (No Diagnosis).</strong> Kepastian sangat rendah. Sistem merekomendasikan pemeriksaan manual.</>}
                   </p>
                 </div>
